@@ -1,0 +1,26 @@
+---
+title: "ML SECRET HIDEOUT"
+author: "Benjamin Landre"
+output:
+  html_document:
+    toc: false
+    toc_float: false
+---
+<style>
+  h1{
+    font-size: 80px !important;
+    color: #000000 !important;
+    border-style: solid;
+    border-color: #000000;
+    background-color: #FFFFFF;
+    text-align: center;
+    margin-top: 100px;
+  }
+</style>
+
+<h1>ML        
+Secret Hideout</h1>
+<br>   
+<br>   
+<br>   
+<center>Blablabla.Blablabla.Blablabla.Blablabla.</center>

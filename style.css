@@ -1,0 +1,32 @@
+.author,.title{
+    display: none;
+}
+.navbar-inverse .navbar-nav>.active>a {
+  background-color: #FFFFFF;
+}
+a {
+    color: #000000;
+    text-decoration: none;
+}
+.list-group-item.active {
+  background-color: #d62d20;
+  border-color: #d62d20;
+}
+item.active, .list-group-item.active:hover {
+  background-color: #d62d20;
+  border-color: #d62d20;
+}
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+    color: #ffffff;
+    background-color: #d62d20;
+}
+a {
+    color: #000000;
+    text-decoration: none;
+}
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:hover, .dropdown-menu>.active>a:focus {
+    color: #ffffff;
+    text-decoration: none;
+    outline: 0;
+    background-color: #d62d20;
+}

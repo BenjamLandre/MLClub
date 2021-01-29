@@ -1,0 +1,145 @@
+author: "Benjamin Landre"
+navbar:
+  title: "ML Secret Hideout"
+  type: inverse
+  left:
+    - text: "By method"
+      icon: fa-check-circle
+      menu:
+        - text: "Generalized Linear Models"
+          href: glmpage.html
+        - text: "---------"
+        - text: "Random Tree"
+          menu:
+            - text: "Cross-sectional design"
+              href: page1.html
+            - text: "---------"
+            - text: "Survival design"
+              href: page1.html
+        - text: "Random Forest"
+          menu:
+            - text: "Cross-sectional design"
+              href: page1.html
+            - text: "---------"
+            - text: "Survival design"
+              href: page1.html
+        - text: "---------"
+        - text: "Gradient boosting"
+          href: page1.html
+        - text: "---------"
+        - text: "Lasso regression"
+          menu:
+            - text: "Cross-sectional design"
+              href: page1.html
+            - text: "---------"
+            - text: "Survival design"
+              href: page1.html
+        - text: "Ridge regression"
+          href: page1.html
+        - text: "Elastic net regression"
+          href: page1.html
+        - text: "---------"
+        - text: "Suport Vector Machine"
+          href: page1.html
+        - text: "---------"
+        - text: "Neural network"
+          href: page1.html
+        - text: "---------"
+        - text: "Naive Bayesian Model"
+          href: page1.html
+        - text: "Mixed Models"
+          href: page1.html
+        - text: "---------"
+        - text: "Lasso Mixed models"
+          href: page1.html
+        - text: "---------"
+        - text: "Cox model"
+          href: page1.html
+        - text: "---------"
+        - text: "Frailty model"
+          href: page1.html     
+        - text: "---------"
+        - text: "Parametric survival model"
+          href: page1.html      
+    - text: "By design"
+      icon: fa-check-circle
+      menu:
+        - text: "Cross-sectional"
+          menu:
+            - text: "Generalized Linear Models"
+              href: page1.html
+            - text: "---------"
+            - text: "Random Tree"
+              href: page1.html
+            - text: "Random Forest"
+              href: page1.html
+            - text: "---------"
+            - text: "Gradient boosting"
+              href: page1.html
+            - text: "---------"
+            - text: "Lasso regression"
+              href: page1.html
+            - text: "Ridge regression"
+              href: page1.html
+            - text: "Elastic net regression"
+              href: page1.html
+            - text: "---------"
+            - text: "Suport Vector Machine"
+              href: page1.html
+            - text: "---------"
+            - text: "Neural network"
+              href: page1.html
+            - text: "---------"
+            - text: "Naive Bayesian Model"
+              href: page1.html
+        - text: "Longitudinal"
+          menu:
+            - text: "Mixed Models"
+              href: page1.html
+            - text: "---------"
+            - text: "Lasso Mixed models"
+              href: page1.html
+        - text: "Survival"
+          menu:
+            - text: "Cox model"
+              href: page1.html
+            - text: "---------"
+            - text: "Frailty model"
+              href: page1.html     
+            - text: "---------"
+            - text: "Parametric survival model"
+              href: page1.html      
+            - text: "---------"
+            - text: "Random Tree"
+              href: page1.html
+            - text: "Random Forest"
+              href: page1.html
+            - text: "---------"
+            - text: "Lasso regression"
+              href: page1.html
+            - text: "Ridge regression"
+              href: page1.html
+            - text: "Elastic net regression"
+              href: page1.html
+    - text: "Meta-knowledge"
+      icon: fa-check-circle
+      menu:
+          - text: "Comparison indicators"
+            href: page1.html
+          - text: "---------"
+          - text: "Sampling methods"
+            href: page1.html            
+          - text: "---------"
+          - text: "Cross-validation"
+            href: page1.html
+          - text: "K-fold cross-validation"
+            href: page1.html
+  right:
+    - text: "Datasets"
+      icon: fa-file-code-o fa-lg
+      href: page1.html
+output_dir: "."
+output:
+  html_document:
+    theme: readable
+    css: style.css
