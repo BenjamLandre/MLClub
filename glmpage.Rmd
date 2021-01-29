@@ -28,146 +28,166 @@ output:
 
 <h1> Summary of the method </h1>
 
-Blabla    
-Blabla   
+Costa Rica (UK: /ˌkɒstə ˈriːkə/, US: /ˌkoʊstə/ (About this soundlisten); Spanish: [ˈkosta ˈrika]; literally "Rich Coast"), officially the Republic of Costa Rica (Spanish: República de Costa Rica), is a country in Central America, bordered by Nicaragua to the north, the Caribbean Sea to the northeast, Panama to the southeast, the Pacific Ocean to the southwest, and Ecuador to the south of Cocos Island. It has a population of around 5 million[5][6] in a land area of 51,060 square kilometers (19,714 square miles). An estimated 333,980 people live in the capital and largest city, San José, with around 2 million people in the surrounding metropolitan area.  
 
 ![](voyage-nature-costa-rica-sylvain-lefebvre.jpg)
   
-Blabla   
-Blabla   
-Blabla   
-Blabla   
+The sovereign state is a unitary presidential constitutional republic. It is known for its long-standing and stable democracy, and for its highly educated workforce, most of whom speak English.[11] The country spends roughly 6.9% of its budget (2016) on education, compared to a global average of 4.4%.[11] Its economy, once heavily dependent on agriculture, has diversified to include sectors such as finance, corporate services for foreign companies, pharmaceuticals, and ecotourism. Many foreign manufacturing and services companies operate in Costa Rica's Free Trade Zones (FTZ) where they benefit from investment and tax incentives.[12]
 
 More comprehensive details can be found [HERE](https://www.google.fr/).       
 <br>    
    
 <h1> Code </h1>   
 <br>    
-<h2>Random tree</h2>
+<h2>Generalized linear model</h2>
 
 ### {.tabset .tabset-fade .tabset-pills}      
 
 #### Y is continuous  
 
-**Parameters to consider**        
-  
-*    Parameter 1: level of blabla bla.    
-*    Parameter 2: other think.   
-
 **Summary of the different steps**  
+**(1)**    <span style="color:#d62d20">Prepare the data</span>    
+Continuous data should be standardized    
+Dummy variables must be created for categorical variables   
   
-*    Do the thing 1    
-*    Do the thing 2    
-*    Do the thing 3    
+**(2)**    <span style="color:#d62d20">The sun is shining, the weather is sweet.</span>    
+It makes you want to move your dancing feet.    
+To the rescue, here I am.   
+Want you to know, y'all, can you understand?    
+  
+**(3)**    <span style="color:#d62d20">Here I am</span>    
+Whant you to know just if I can   
+(Tuesday evening) where i stand   
+  
+***
 
-**Step 1: the thing**   
-Blablabla   
-Blablabla   
-Blablabla      
+**(1)** <span style="color:#d62d20">Prepare the data</span>   
+
+**Parameters to consider**    
+- Parameter 1: level of blabla bla with a [LINK](https://www.google.fr).    
+- Parameter 2: other think.
 
 ```{r}
-a <- 1+1
-a *2
+# For this code, the XXXX dataset is used, see dataset page for more information
+a <- c(1, 2, 3, 4)
+
+# Check for outliers or under-represented categories
+boxplot(a)
+
+# Scale continuous variables
+a_std <- scale(a)
+
+# Create dummy variables for categorical
+Will_not_do_it <- 1
 ```
 
 
 ***   
 
-**Step 2: other thing**   
-Blablabla   
-Blablabla   
-Blablabla    
+**(2)** <span style="color:#d62d20">The sun is shining, the weather is sweet</span>   
+
+**Parameters to consider**    
+-    Parameter 1: level of blabla bla.    
+-    Parameter 2: other think.  
 
 ```{r}
 a <- 1+1
 a *2
 ```
-
 
 ***   
 
-**Step 3: last thing**   
-Blablabla   
-Blablabla   
-Blablabla    
+**(3)** <span style="color:#d62d20">Here I am</span>   
+
+**Parameters to consider**    
+-    Parameter 1: level of blabla bla.    
+-    Parameter 2: other think.  
 
 ```{r}
 a <- 1+1
 a *2
 ```
-
 
 ***   
   
 #### Y is binary   
 
-**Parameters to consider**        
-  
-*    Parameter 1: beware of ducks.    
-*    Parameter 2: other think.   
-
 **Summary of the different steps**  
+**(1)** <span style="color:#d62d20">behave yourself, kid!</span>    
+Blabla    
+Blablabla   
   
-*    Do the thing 1    
-*    Do the thing 2    
-*    Do the thing 3    
-
-**Step 1: the thing**   
+**(2)** <span style="color:#d62d20">don't do drug</span>   
+blabla    
+  
+**(3)** <span style="color:#d62d20">zeazeaze</span>    
+blabla    
+blabla    
 Blablabla   
 Blablabla   
 Blablabla      
 
+**(1)** <span style="color:#d62d20">behave yourself, kid!</span>   
+  
+**Parameters to consider**        
+-    Parameter 1: beware of ducks.    
+-    Parameter 2: other think.
+
 ```{r}
 a <- 1+1
 a *2
 ```
-
 
 ***   
 
-**Step 2: other thing**   
-Blablabla   
-Blablabla   
-Blablabla    
+**(2)** <span style="color:#d62d20">Other important step</span>   
 
+**Parameters to consider**        
+-    Parameter 1: beware of ducks.    
+-    Parameter 2: other think.    
+  
 ```{r}
 a <- 1+1
 a *2
 ```
-
 
 ***   
 
-**Step 3: last thing**   
-Blablabla   
-Blablabla   
-Blablabla    
+**(3)** <span style="color:#d62d20">last thing</span>   
+
+**Parameters to consider**        
+-    Parameter 1: beware of ducks.    
+-    Parameter 2: other think.    
 
 ```{r}
 a <- 1+1
 a *2
 ```
-
 
 ***   
   
 #### Y is a count data    
-  
-**Parameters to consider**        
-  
-*    Parameter 1: level of blabla bla.    
-*    Parameter 2: other think.   
 
 **Summary of the different steps**  
+**(1)** <span style="color:#d62d20">behave yourself, kid!</span>  
+Blabla    
+Blablabla   
   
-*    Do the thing 1    
-*    Do the thing 2    
-*    Do the thing 3    
-
-**Step 1: the thing**   
+**(2)** <span style="color:#d62d20">don't do drug</span>   
+blabla    
+  
+**(3)** <span style="color:#d62d20">zeazeaze</span>    
+blabla    
+blabla    
 Blablabla   
 Blablabla   
 Blablabla      
+
+**(1)** <span style="color:#d62d20">behave yourself, kid!</span>    
+
+**Parameters to consider**        
+-    Parameter 1: level of blabla bla.    
+-    Parameter 2: other think. 
 
 ```{r}
 a <- 1+1
@@ -177,169 +197,182 @@ a *2
 
 ***   
 
-**Step 2: other thing**   
-Blablabla   
-Blablabla   
-Blablabla    
+**(2)** <span style="color:#d62d20">don't do drug</span>   
+
+**Parameters to consider**        
+-    Parameter 1: level of blabla bla.    
+-    Parameter 2: other think. 
 
 ```{r}
 a <- 1+1
 a *2
 ```
-
 
 ***   
 
-**Step 3: last thing**   
-Blablabla   
-Blablabla   
-Blablabla      
+**(3)** <span style="color:#d62d20">zeazeaze</span>     
+
+**Parameters to consider**        
+-    Parameter 1: level of blabla bla.    
+-    Parameter 2: other think. 
 
 ```{r}
 a <- 1+1
 a *2
 ```
-
 
 ***                   
+
 ###       
-<h2> Random tree with CV</h2>
+<h2>Generalized linear model with flames</h2>
 
 ### {.tabset .tabset-fade .tabset-pills}
 
-#### Y is continuous
-**Parameters to consider**        
-  
-*    Parameter 1: level of blabla bla.    
-*    Parameter 2: other think.   
+#### Y is continuous  
 
 **Summary of the different steps**  
+**(1)**    <span style="color:#d62d20">Prepare the data</span>    
+Continuous data should be standardized    
+Dummy variables must be created for categorical variables   
   
-*    Do the thing 1    
-*    Do the thing 2    
-*    Do the thing 3    
+**(2)**    <span style="color:#d62d20">The sun is shining, the weather is sweet.</span>    
+It makes you want to move your dancing feet.    
+To the rescue, here I am.   
+Want you to know, y'all, can you understand?    
+  
+**(3)**    <span style="color:#d62d20">Here I am</span>    
+Whant you to know just if I can   
+(Tuesday evening) where i stand   
+  
+***
 
-**Step 1: the thing**   
-Blablabla   
-Blablabla   
-Blablabla      
+**(1)** <span style="color:#d62d20">Prepare the data</span>   
+
+**Parameters to consider**    
+-    Parameter 1: level of blabla bla with a [LINK](https://www.google.fr).    
+-    Parameter 2: other think.  
 
 ```{r}
-a <- 1+1
-a *2
+# For this code, the XXXX dataset is used, see dataset page for more information
+a <- c(1, 2, 3, 4)
+
+# Check for outliers or under-represented categories
+boxplot(a)
+
+# Scale continuous variables
+a_std <- scale(a)
+
+# Create dummy variables for categorical
+Will_not_do_it <- 1
 ```
 
 
 ***   
 
-**Step 2: other thing**   
-Blablabla   
-Blablabla   
-Blablabla    
+**(2)** <span style="color:#d62d20">The sun is shining, the weather is sweet</span>   
+
+**Parameters to consider**    
+-    Parameter 1: level of blabla bla.    
+-    Parameter 2: other think.  
 
 ```{r}
 a <- 1+1
 a *2
 ```
-
 
 ***   
 
-**Step 3: last thing**   
-Blablabla   
-Blablabla   
-Blablabla    
+**(3)** <span style="color:#d62d20">Here I am</span>   
+
+**Parameters to consider**    
+-    Parameter 1: level of blabla bla.    
+-    Parameter 2: other think.  
 
 ```{r}
 a <- 1+1
 a *2
 ```
-
 
 ***   
   
 #### Y is binary   
 
-**Parameters to consider**        
-  
-*    Parameter 1: beware of ducks.    
-*    Parameter 2: other think.   
-
 **Summary of the different steps**  
+**(1)** <span style="color:#d62d20">behave yourself, kid!</span>  
+Blabla    
+Blablabla   
   
-*    Do the thing 1    
-*    Do the thing 2    
-*    Do the thing 3    
-
-**Step 1: the thing**   
+**(2)** <span style="color:#d62d20">don't do drug</span>   
+blabla    
+  
+**(3)** <span style="color:#d62d20">zeazeaze</span>    
+blabla    
+blabla    
 Blablabla   
 Blablabla   
 Blablabla      
 
+**(1)** <span style="color:#d62d20">behave yourself, kid!</span>   
+  
+**Parameters to consider**        
+-    Parameter 1: beware of ducks.    
+-    Parameter 2: other think.
+
 ```{r}
 a <- 1+1
 a *2
 ```
-
 
 ***   
 
-**Step 2: other thing**   
-Blablabla   
-Blablabla   
-Blablabla    
+**(2)** <span style="color:#d62d20">Other important step</span>   
 
+**Parameters to consider**        
+-    Parameter 1: beware of ducks.    
+-    Parameter 2: other think.    
+  
 ```{r}
 a <- 1+1
 a *2
 ```
-
 
 ***   
 
-**Step 3: last thing**   
-Blablabla   
-Blablabla   
-Blablabla    
+**(3)** <span style="color:#d62d20">last thing</span>   
+
+**Parameters to consider**        
+-    Parameter 1: beware of ducks.    
+-    Parameter 2: other think.    
 
 ```{r}
 a <- 1+1
 a *2
 ```
-
 
 ***   
   
 #### Y is a count data    
-  
-**Parameters to consider**        
-  
-*    Parameter 1: level of blabla bla.    
-*    Parameter 2: other think.   
 
 **Summary of the different steps**  
+**(1)** <span style="color:#d62d20">behave yourself, kid!</span>  
+Blabla    
+Blablabla   
   
-*    Do the thing 1    
-*    Do the thing 2    
-*    Do the thing 3    
-
-**Step 1: the thing**   
+**(2)** <span style="color:#d62d20">don't do drug</span>   
+blabla    
+  
+**(3)** <span style="color:#d62d20">zeazeaze</span>    
+blabla    
+blabla    
 Blablabla   
 Blablabla   
-Blablabla     
+Blablabla      
 
-```{r}
-a <- 1+1
-a *2
-```
+**(1)** <span style="color:#d62d20">behave yourself, kid!</span>    
 
-
-***    
-
-**Step 2: other thing**   
-Blablabla   
-Blablabla   
-Blablabla    
+**Parameters to consider**        
+-    Parameter 1: level of blabla bla.    
+-    Parameter 2: other think. 
 
 ```{r}
 a <- 1+1
@@ -349,153 +382,182 @@ a *2
 
 ***   
 
-**Step 3: last thing**   
-Blablabla   
-Blablabla   
-Blablabla     
+**(2)** <span style="color:#d62d20">don't do drug</span>   
+
+**Parameters to consider**        
+-    Parameter 1: level of blabla bla.    
+-    Parameter 2: other think. 
 
 ```{r}
 a <- 1+1
 a *2
 ```
-***       
+
+***   
+
+**(3)** <span style="color:#d62d20">zeazeaze</span>     
+
+**Parameters to consider**        
+-    Parameter 1: level of blabla bla.    
+-    Parameter 2: other think. 
+
+```{r}
+a <- 1+1
+a *2
+```
+
+***
+
 ###
-<h2> Random tree with k-fold CV</h2>
+<h2>Generalized model with blue eyes</h2>
 
 ### {.tabset .tabset-fade .tabset-pills}
 
-#### Y is continuous
-**Parameters to consider**        
-  
-*    Parameter 1: level of blabla bla.    
-*    Parameter 2: other think.   
+#### Y is continuous  
 
 **Summary of the different steps**  
+**(1)**    <span style="color:#d62d20">Prepare the data</span>    
+Continuous data should be standardized    
+Dummy variables must be created for categorical variables   
   
-*    Do the thing 1    
-*    Do the thing 2    
-*    Do the thing 3    
+**(2)**    <span style="color:#d62d20">The sun is shining, the weather is sweet.</span>    
+It makes you want to move your dancing feet.    
+To the rescue, here I am.   
+Want you to know, y'all, can you understand?    
+  
+**(3)**    <span style="color:#d62d20">Here I am</span>    
+Whant you to know just if I can   
+(Tuesday evening) where i stand   
+  
+***
 
-**Step 1: the thing**   
-Blablabla   
-Blablabla   
-Blablabla     
+**(1)** <span style="color:#d62d20">Prepare the data</span>   
 
-```{r}
-a <- 1+1
-a *2
-```
-
-
-***    
-
-**Step 2: other thing**   
-Blablabla   
-Blablabla   
-Blablabla    
+**Parameters to consider**    
+-    Parameter 1: level of blabla bla with a [LINK](https://www.google.fr).    
+-    Parameter 2: other think.  
 
 ```{r}
-a <- 1+1
-a *2
+# For this code, the XXXX dataset is used, see dataset page for more information
+a <- c(1, 2, 3, 4)
+
+# Check for outliers or under-represented categories
+boxplot(a)
+
+# Scale continuous variables
+a_std <- scale(a)
+
+# Create dummy variables for categorical
+Will_not_do_it <- 1
 ```
 
 
 ***   
 
-**Step 3: last thing**   
-Blablabla   
-Blablabla   
-Blablabla    
+**(2)** <span style="color:#d62d20">The sun is shining, the weather is sweet</span>   
+
+**Parameters to consider**    
+-    Parameter 1: level of blabla bla.    
+-    Parameter 2: other think.  
 
 ```{r}
 a <- 1+1
 a *2
 ```
 
+***   
+
+**(3)** <span style="color:#d62d20">Here I am</span>   
+
+**Parameters to consider**    
+-    Parameter 1: level of blabla bla.    
+-    Parameter 2: other think.  
+
+```{r}
+a <- 1+1
+a *2
+```
 
 ***   
   
 #### Y is binary   
 
-**Parameters to consider**        
-  
-*    Parameter 1: beware of ducks.    
-*    Parameter 2: other think.   
-
 **Summary of the different steps**  
+**(1)** <span style="color:#d62d20">behave yourself, kid!</span>  
+Blabla    
+Blablabla   
   
-*    Do the thing 1    
-*    Do the thing 2    
-*    Do the thing 3    
+**(2)** <span style="color:#d62d20">don't do drug</span>   
+blabla    
+  
+**(3)** <span style="color:#d62d20">zeazeaze</span>    
+blabla    
+blabla    
+Blablabla   
+Blablabla   
+Blablabla      
 
-**Step 1: the thing**   
-Blablabla   
-Blablabla   
-Blablabla     
+**(1)** <span style="color:#d62d20">behave yourself, kid!</span>   
+  
+**Parameters to consider**        
+-    Parameter 1: beware of ducks.    
+-    Parameter 2: other think.
 
 ```{r}
 a <- 1+1
 a *2
 ```
 
+***   
 
-***    
+**(2)** <span style="color:#d62d20">Other important step</span>   
 
-**Step 2: other thing**   
-Blablabla   
-Blablabla   
-Blablabla   
-
+**Parameters to consider**        
+-    Parameter 1: beware of ducks.    
+-    Parameter 2: other think.    
+  
 ```{r}
 a <- 1+1
 a *2
 ```
 
+***   
 
-***    
+**(3)** <span style="color:#d62d20">last thing</span>   
 
-**Step 3: last thing**   
-Blablabla   
-Blablabla   
-Blablabla    
+**Parameters to consider**        
+-    Parameter 1: beware of ducks.    
+-    Parameter 2: other think.    
 
 ```{r}
 a <- 1+1
 a *2
 ```
-
 
 ***   
   
 #### Y is a count data    
-  
-**Parameters to consider**        
-  
-*    Parameter 1: level of blabla bla.    
-*    Parameter 2: other think.   
 
 **Summary of the different steps**  
+**(1)** <span style="color:#d62d20">behave yourself, kid!</span>  
+Blabla    
+Blablabla   
   
-*    Do the thing 1    
-*    Do the thing 2    
-*    Do the thing 3    
+**(2)** <span style="color:#d62d20">don't do drug</span>   
+blabla    
+  
+**(3)** <span style="color:#d62d20">zeazeaze</span>    
+blabla    
+blabla    
+Blablabla   
+Blablabla   
+Blablabla      
 
-**Step 1: the thing**   
-Blablabla   
-Blablabla   
-Blablabla   
+**(1)** <span style="color:#d62d20">behave yourself, kid!</span>    
 
-```{r}
-a <- 1+1
-a *2
-```
-
-
-***       
-**Step 2: other thing**   
-Blablabla   
-Blablabla   
-Blablabla    
+**Parameters to consider**        
+-    Parameter 1: level of blabla bla.    
+-    Parameter 2: other think. 
 
 ```{r}
 a <- 1+1
@@ -504,15 +566,29 @@ a *2
 
 
 ***   
-**Step 3: last thing**   
-Blablabla   
-Blablabla   
-Blablabla   
+
+**(2)** <span style="color:#d62d20">don't do drug</span>   
+
+**Parameters to consider**        
+-    Parameter 1: level of blabla bla.    
+-    Parameter 2: other think. 
 
 ```{r}
 a <- 1+1
 a *2
 ```
 
+***   
+
+**(3)** <span style="color:#d62d20">zeazeaze</span>     
+
+**Parameters to consider**        
+-    Parameter 1: level of blabla bla.    
+-    Parameter 2: other think. 
+
+```{r}
+a <- 1+1
+a *2
+```
 
 ***   
