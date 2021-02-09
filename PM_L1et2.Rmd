@@ -261,7 +261,56 @@ The Heart Failure Prediction data was used. The outcome was ejection fraction an
 More information about the dataset can be found in the dataset tab ([HERE](https://WWW.google.fr)) or on the kaggle site ([HERE](https://www.kaggle.com/andrewmvd/heart-failure-clinical-data?select=heart_failure_clinical_records_dataset.csv)).
 
 ```{r, message = FALSE}
+library(readr)
+library(caret)
 
+heart <- as.data.frame(read_csv("heart_failure_clinical_records_dataset.csv", 
+                                col_types = cols(DEATH_EVENT = col_factor(levels = c("0", "1")),
+                                                 anaemia = col_factor(levels = c("0", "1")),
+                                                 sex = col_factor(levels = c("0", "1")),
+                                                 smoking = col_factor(levels = c("0", "1")),
+                                                 diabetes = col_factor(levels = c("0", "1")),
+                                                 high_blood_pressure = col_factor(levels = c("0","1")))))
+
+# Data management of continous variables ----------------------------------------------------
+
+# I) Log transformation for: creatinine_phosphokinase & serum_creatinine
+heart$CP_log <- log(heart$creatinine_phosphokinase)
+heart$SC_log <- log(heart$serum_creatinine)
+
+# II) Scaling using population summary statistics
+Cols <- names(heart[, c(1, 5, 7, 9, 14, 15)])
+heart[Cols] <- lapply(heart[Cols], scale)
+
+# III) Remove unused variables
+heart <- heart[,-c(3, 8, 12)]
+
+# Sampling ----------------------------------------------------------------------------------
+
+# I) Unweighted sampling
+set.seed(11)
+trainIndex <- createDataPartition(heart$SC_log, p = .7, 
+                                  list = FALSE, 
+                                  times = 1)
+heart_train <- heart[trainIndex,]
+heart_test  <- heart[-trainIndex,]
+
+# Data management of categorical variables --------------------------------------------------
+
+# I) Create dummy variables
+
+# II) Separate outcome and predictors in different dataset
+x_train <- heart_train[,-c(12)]
+x_test <- heart_test[,-c(12)]
+
+y_train <- as.numeric(heart_train$SC_log)
+y_test <- as.numeric(heart_test$SC_log)
+
+# Data management of categorical variables --------------------------------------------------
+
+# I) Create dummy variables
+x_train_dm <- model.matrix( ~ .-1, data = x_train, contrasts.arg = lapply(x_train[,c(2, 3, 5, 8, 9, 10)], contrasts, contrasts=FALSE))
+x_test_dm <-  model.matrix( ~ .-1, data = x_test, contrasts.arg = lapply(x_test[,c(2, 3, 5, 8, 9, 10)], contrasts, contrasts=FALSE))
 ```
 
 ***   
@@ -276,11 +325,36 @@ More information about the dataset can be found in the dataset tab ([HERE](https
 -   choice of cross-validation error measure (default for continuous outcome = mean squared error)[HERE](https://stats.stackexchange.com/questions/131267/how-to-interpret-error-measures)    
 
 ```{r, message = T}
+library(glmnet)
+set.seed(11)
+# Cross-validation of Ridge model
 
+ControlParameters <- trainControl(method = "cv",
+                                  number = 10)
+
+Hyperspace_param <- expand.grid(alpha = seq(0, 1, by = 0.1),
+                                lambda = seq(0.001,0.1,by = 0.001))
+
+CV.Elastic <- train(x = x_train_dm,
+                    y = y_train,
+                    trControl = ControlParameters,
+                    tuneGrid = Hyperspace_param,
+                    method = "glmnet",
+                    metric = "RMSE")
+
+# Change of cross-validation measure with log(lambda)
+plot(CV.Elastic)
+CV.Elastic$bestTune
 ```
 
 ```{r, echo = F}
+Coef_Elastic <- coef(CV.Elastic$finalModel, CV.Elastic$bestTune$lambda)
+Coef_Elastic
 
+GLM <- glm(formula = SC_log ~ .,
+              data = heart_train,
+              family = "gaussian")
+summary(GLM)
 ```
 
 ***   
@@ -291,77 +365,78 @@ More information about the dataset can be found in the dataset tab ([HERE](https
 -    Are previous steps correct ? 
 
 ```{r}
-
+A <- predict(CV.Elastic$finalModel, newx = x_test_dm, s = CV.Elastic$bestTune$lambda, type = "class")
+postResample(pred = A, obs = heart_test$SC_log)
 ```
 
-***   
-  
-#### Y is a time-to-event outcome   
+<!-- ***    -->
 
-**Summary of the different steps**  
-**(1)**    <span style="color:#d62d20">Data management</span>    
-Continuous data should be scaled    
-Dummy variables must be created for categorical variables   
-Training and testing data sets must be created   
-  
-**(2)**    <span style="color:#d62d20">Training of the data set</span>    
-Find $\lambda$ and $\alpha$ which minimize cross-validation error measure (partial likelihood deviance for time-to-event outcomes)    
-Predict on training dataset using the optimal $\lambda$ and $\alpha$ combination   
-  
-**(3)**    <span style="color:#d62d20">Predicting on testing data set</span>    
-Predict on testing dataset       
-  
-***
+<!-- #### Y is a time-to-event outcome    -->
 
-**(1) Data management**  
+<!-- **Summary of the different steps**   -->
+<!-- **(1)**    <span style="color:#d62d20">Data management</span>     -->
+<!-- Continuous data should be scaled     -->
+<!-- Dummy variables must be created for categorical variables    -->
+<!-- Training and testing data sets must be created    -->
 
-**Parameters to consider**    
-- Scaling methodology [LINK](https://www.google.fr).    
-- Weighting of the sampling [LINK](https://www.google.fr).    
-- Choice of time-scale for time-to-event variable.    
+<!-- **(2)**    <span style="color:#d62d20">Training of the data set</span>     -->
+<!-- Find $\lambda$ and $\alpha$ which minimize cross-validation error measure (partial likelihood deviance for time-to-event outcomes)     -->
+<!-- Predict on training dataset using the optimal $\lambda$ and $\alpha$ combination    -->
 
-The Heart Failure Prediction data was used. The outcome was death as a time-to-event data and predictors were all others variables.
-More information about the dataset can be found in the dataset tab ([HERE](https://benjamlandre.github.io/MLClub/dataset_page.html)) or on the kaggle site ([HERE](https://www.kaggle.com/andrewmvd/heart-failure-clinical-data?select=heart_failure_clinical_records_dataset.csv)).
+<!-- **(3)**    <span style="color:#d62d20">Predicting on testing data set</span>     -->
+<!-- Predict on testing dataset        -->
 
-```{r, message = FALSE}
+<!-- *** -->
 
-```
+<!-- **(1) Data management**   -->
 
-***   
+<!-- **Parameters to consider**     -->
+<!-- - Scaling methodology [LINK](https://www.google.fr).     -->
+<!-- - Weighting of the sampling [LINK](https://www.google.fr).     -->
+<!-- - Choice of time-scale for time-to-event variable.     -->
 
-**(2) Training of the data set** 
+<!-- The Heart Failure Prediction data was used. The outcome was death as a time-to-event data and predictors were all others variables. -->
+<!-- More information about the dataset can be found in the dataset tab ([HERE](https://benjamlandre.github.io/MLClub/dataset_page.html)) or on the kaggle site ([HERE](https://www.kaggle.com/andrewmvd/heart-failure-clinical-data?select=heart_failure_clinical_records_dataset.csv)). -->
 
-**Parameters to consider**    
--   nfolds: the number of cross-validation (default = 10).    
--   standardize: standardize the x variables (default = TRUE).    
--   $\alpha$: the mixing parameter.   
--   $\lambda$: the choice of optimal $\lambda$ to choose (minimal or in 1SE range of the minimal $\lambda$). see [HERE](https://stats.stackexchange.com/questions/138569/why-is-lambda-within-one-standard-error-from-the-minimum-is-a-recommended-valu)       
--   choice of cross-validation error measure (default for continuous outcome = mean squared error)[HERE](https://stats.stackexchange.com/questions/131267/how-to-interpret-error-measures)    
+<!-- ```{r, message = FALSE} -->
 
-```{r, message = T}
+<!-- ``` -->
 
-```
+<!-- ***    -->
 
-```{r, echo = F}
+<!-- **(2) Training of the data set**  -->
 
-```
+<!-- **Parameters to consider**     -->
+<!-- -   nfolds: the number of cross-validation (default = 10).     -->
+<!-- -   standardize: standardize the x variables (default = TRUE).     -->
+<!-- -   $\alpha$: the mixing parameter.    -->
+<!-- -   $\lambda$: the choice of optimal $\lambda$ to choose (minimal or in 1SE range of the minimal $\lambda$). see [HERE](https://stats.stackexchange.com/questions/138569/why-is-lambda-within-one-standard-error-from-the-minimum-is-a-recommended-valu)        -->
+<!-- -   choice of cross-validation error measure (default for continuous outcome = mean squared error)[HERE](https://stats.stackexchange.com/questions/131267/how-to-interpret-error-measures)     -->
 
-```{r}
-# Prediction and summary statistics in training dataset
+<!-- ```{r, message = T} -->
 
-```
+<!-- ``` -->
 
-***   
+<!-- ```{r, echo = F} -->
 
-**(3)Predicting on testing data set**   
+<!-- ``` -->
 
-**Parameters to consider**    
--    Are previous steps correct ? 
+<!-- ```{r} -->
+<!-- # Prediction and summary statistics in training dataset -->
 
-```{r}
-# Prediction and summary statistics in testing dataset
+<!-- ``` -->
 
-```
+<!-- ***    -->
+
+<!-- **(3)Predicting on testing data set**    -->
+
+<!-- **Parameters to consider**     -->
+<!-- -    Are previous steps correct ?  -->
+
+<!-- ```{r} -->
+<!-- # Prediction and summary statistics in testing dataset -->
+
+<!-- ``` -->
 
 ***  
 
