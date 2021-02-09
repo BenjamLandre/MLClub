@@ -365,7 +365,7 @@ summary(GLM)
 -    Are previous steps correct ? 
 
 ```{r}
-A <- predict(CV.Elastic$finalModel, newx = x_test_dm, s = CV.Elastic$bestTune$lambda, type = "class")
+A <- predict(CV.Elastic$finalModel, newx = x_test_dm, s = CV.Elastic$bestTune$lambda)
 postResample(pred = A, obs = heart_test$SC_log)
 ```
 
