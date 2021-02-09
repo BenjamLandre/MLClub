@@ -909,7 +909,7 @@ plot(CV.Elastic)</code></pre>
 <p><strong>(3)Predicting on testing data set</strong></p>
 <p><strong>Parameters to consider</strong><br />
 - Are previous steps correct ?</p>
-<pre class="r"><code>A &lt;- predict(CV.Elastic$finalModel, newx = x_test_dm, s = CV.Elastic$bestTune$lambda, type = &quot;class&quot;)
+<pre class="r"><code>A &lt;- predict(CV.Elastic$finalModel, newx = x_test_dm, s = CV.Elastic$bestTune$lambda)
 postResample(pred = A, obs = heart_test$SC_log)</code></pre>
 <pre><code>##      RMSE  Rsquared       MAE 
 ## 1.0562882 0.1485629 0.6569638</code></pre>
