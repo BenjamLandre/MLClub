@@ -23,8 +23,6 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -81,6 +79,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 
@@ -288,100 +287,66 @@ $(document).ready(function () {
       <ul class="nav navbar-nav">
         <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-check-circle"></span>
+    <span class="fas fa-check-circle"></span>
      
     By method
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="glmpage.html">Generalized Linear Models</a>
-    </li>
-    <li class="divider"></li>
     <li class="dropdown-submenu">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Random Tree</a>
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Penalized models</a>
       <ul class="dropdown-menu" role="menu">
         <li>
-          <a href="page1.html">Cross-sectional design</a>
+          <a href="penalized_models.html">How it works?</a>
         </li>
-        <li class="divider"></li>
+        <li class="dropdown-header">- Code -</li>
         <li>
-          <a href="page1.html">Survival design</a>
+          <a href="PM_L1.html">LASSO regularization</a>
         </li>
-      </ul>
-    </li>
-    <li class="dropdown-submenu">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Random Forest</a>
-      <ul class="dropdown-menu" role="menu">
         <li>
-          <a href="page1.html">Cross-sectional design</a>
+          <a href="PM_L2.html">RIDGE regularization</a>
         </li>
-        <li class="divider"></li>
         <li>
-          <a href="page1.html">Survival design</a>
+          <a href="PM_L1et2.html">Elasticnet regularization</a>
+        </li>
+        <li class="dropdown-header">- Parameters to consider -</li>
+        <li>
+          <a href="Construction_page.html">Performance metrics</a>
+        </li>
+        <li>
+          <a href="Construction_page.html">Sampling procedure</a>
         </li>
       </ul>
     </li>
     <li class="divider"></li>
     <li>
-      <a href="page1.html">Gradient boosting</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-submenu">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Lasso regression</a>
-      <ul class="dropdown-menu" role="menu">
-        <li>
-          <a href="page1.html">Cross-sectional design</a>
-        </li>
-        <li class="divider"></li>
-        <li>
-          <a href="page1.html">Survival design</a>
-        </li>
-      </ul>
+      <a href="Construction_page.html">Random Tree</a>
     </li>
     <li>
-      <a href="page1.html">Ridge regression</a>
-    </li>
-    <li>
-      <a href="page1.html">Elastic net regression</a>
+      <a href="Construction_page.html">Random Forest</a>
     </li>
     <li class="divider"></li>
     <li>
-      <a href="page1.html">Suport Vector Machine</a>
+      <a href="Construction_page.html">Gradient boosting</a>
     </li>
     <li class="divider"></li>
     <li>
-      <a href="page1.html">Neural network</a>
+      <a href="Construction_page.html">Suport Vector Machine</a>
     </li>
     <li class="divider"></li>
     <li>
-      <a href="page1.html">Naive Bayesian Model</a>
-    </li>
-    <li>
-      <a href="page1.html">Mixed Models</a>
+      <a href="Construction_page.html">Neural network</a>
     </li>
     <li class="divider"></li>
     <li>
-      <a href="page1.html">Lasso Mixed models</a>
-    </li>
-    <li class="divider"></li>
-    <li>
-      <a href="page1.html">Cox model</a>
-    </li>
-    <li class="divider"></li>
-    <li>
-      <a href="page1.html">Frailty model</a>
-    </li>
-    <li class="divider"></li>
-    <li>
-      <a href="page1.html">Parametric survival model</a>
+      <a href="Construction_page.html">Naive Bayesian Model</a>
     </li>
   </ul>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-check-circle"></span>
+    <span class="fas fa-check-circle"></span>
      
     By design
      
@@ -391,41 +356,53 @@ $(document).ready(function () {
     <li class="dropdown-submenu">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Cross-sectional</a>
       <ul class="dropdown-menu" role="menu">
-        <li>
-          <a href="page1.html">Generalized Linear Models</a>
+        <li class="dropdown-submenu">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Penalized models</a>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <a href="penalized_models.html">How it works?</a>
+            </li>
+            <li class="dropdown-header">- Code -</li>
+            <li>
+              <a href="PM_L1.html">LASSO regularization</a>
+            </li>
+            <li>
+              <a href="PM_L2.html">RIDGE regularization</a>
+            </li>
+            <li>
+              <a href="PM_L1et2.html">Elasticnet regularization</a>
+            </li>
+            <li class="dropdown-header">- Parameters to consider -</li>
+            <li>
+              <a href="Construction_page.html">Performance metrics</a>
+            </li>
+            <li>
+              <a href="Construction_page.html">Sampling procedure</a>
+            </li>
+          </ul>
         </li>
         <li class="divider"></li>
         <li>
-          <a href="page1.html">Random Tree</a>
+          <a href="Construction_page.html">Random Tree</a>
         </li>
         <li>
-          <a href="page1.html">Random Forest</a>
-        </li>
-        <li class="divider"></li>
-        <li>
-          <a href="page1.html">Gradient boosting</a>
+          <a href="Construction_page.html">Random Forest</a>
         </li>
         <li class="divider"></li>
         <li>
-          <a href="page1.html">Lasso regression</a>
-        </li>
-        <li>
-          <a href="page1.html">Ridge regression</a>
-        </li>
-        <li>
-          <a href="page1.html">Elastic net regression</a>
+          <a href="Construction_page.html">Gradient boosting</a>
         </li>
         <li class="divider"></li>
         <li>
-          <a href="page1.html">Suport Vector Machine</a>
+          <a href="Construction_page.html">Suport Vector Machine</a>
         </li>
         <li class="divider"></li>
         <li>
-          <a href="page1.html">Neural network</a>
+          <a href="Construction_page.html">Neural network</a>
         </li>
         <li class="divider"></li>
         <li>
-          <a href="page1.html">Naive Bayesian Model</a>
+          <a href="Construction_page.html">Naive Bayesian Model</a>
         </li>
       </ul>
     </li>
@@ -433,44 +410,41 @@ $(document).ready(function () {
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Longitudinal</a>
       <ul class="dropdown-menu" role="menu">
         <li>
-          <a href="page1.html">Mixed Models</a>
+          <a href="Construction_page.html">Mixed Models</a>
         </li>
         <li class="divider"></li>
         <li>
-          <a href="page1.html">Lasso Mixed models</a>
+          <a href="Construction_page.html">Lasso Mixed models</a>
         </li>
       </ul>
     </li>
     <li class="dropdown-submenu">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Survival</a>
       <ul class="dropdown-menu" role="menu">
-        <li>
-          <a href="page1.html">Cox model</a>
-        </li>
-        <li class="divider"></li>
-        <li>
-          <a href="page1.html">Frailty model</a>
-        </li>
-        <li class="divider"></li>
-        <li>
-          <a href="page1.html">Parametric survival model</a>
-        </li>
-        <li class="divider"></li>
-        <li>
-          <a href="page1.html">Random Tree</a>
-        </li>
-        <li>
-          <a href="page1.html">Random Forest</a>
-        </li>
-        <li class="divider"></li>
-        <li>
-          <a href="page1.html">Lasso regression</a>
-        </li>
-        <li>
-          <a href="page1.html">Ridge regression</a>
-        </li>
-        <li>
-          <a href="page1.html">Elastic net regression</a>
+        <li class="dropdown-submenu">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Penalized models</a>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <a href="penalized_models.html">How it works?</a>
+            </li>
+            <li class="dropdown-header">- Code -</li>
+            <li>
+              <a href="PM_L1.html">LASSO regularization</a>
+            </li>
+            <li>
+              <a href="PM_L2.html">RIDGE regularization</a>
+            </li>
+            <li>
+              <a href="PM_L1et2.html">Elasticnet regularization</a>
+            </li>
+            <li class="dropdown-header">- Parameters to consider -</li>
+            <li>
+              <a href="Construction_page.html">Performance metrics</a>
+            </li>
+            <li>
+              <a href="Construction_page.html">Sampling procedure</a>
+            </li>
+          </ul>
         </li>
       </ul>
     </li>
@@ -478,7 +452,7 @@ $(document).ready(function () {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-check-circle"></span>
+    <span class="fas fa-check-circle"></span>
      
     Meta-knowledge
      
@@ -486,26 +460,19 @@ $(document).ready(function () {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="page1.html">Comparison indicators</a>
+      <a href="Construction_page.html">Performance metrics</a>
     </li>
     <li class="divider"></li>
     <li>
-      <a href="page1.html">Sampling methods</a>
-    </li>
-    <li class="divider"></li>
-    <li>
-      <a href="page1.html">Cross-validation</a>
-    </li>
-    <li>
-      <a href="page1.html">K-fold cross-validation</a>
+      <a href="Construction_page.html">Sampling procedure</a>
     </li>
   </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="page1.html">
-    <span class="fa fa-file-code-o fa-lg"></span>
+  <a href="dataset_page.html">
+    <span class="fas fa-book"></span>
      
     Datasets
   </a>

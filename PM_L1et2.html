@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Elasticnet penalized regression</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 66px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h2 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h3 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h4 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h5 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.section h6 {
+  padding-top: 71px;
+  margin-top: -71px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">ML Secret Hideout</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fas fa-check-circle"></span>
+     
+    By method
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-submenu">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Penalized models</a>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a href="penalized_models.html">How it works?</a>
+        </li>
+        <li class="dropdown-header">- Code -</li>
+        <li>
+          <a href="PM_L1.html">LASSO regularization</a>
+        </li>
+        <li>
+          <a href="PM_L2.html">RIDGE regularization</a>
+        </li>
+        <li>
+          <a href="PM_L1et2.html">Elasticnet regularization</a>
+        </li>
+        <li class="dropdown-header">- Parameters to consider -</li>
+        <li>
+          <a href="Construction_page.html">Performance metrics</a>
+        </li>
+        <li>
+          <a href="Construction_page.html">Sampling procedure</a>
+        </li>
+      </ul>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="Construction_page.html">Random Tree</a>
+    </li>
+    <li>
+      <a href="Construction_page.html">Random Forest</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="Construction_page.html">Gradient boosting</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="Construction_page.html">Suport Vector Machine</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="Construction_page.html">Neural network</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="Construction_page.html">Naive Bayesian Model</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fas fa-check-circle"></span>
+     
+    By design
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-submenu">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Cross-sectional</a>
+      <ul class="dropdown-menu" role="menu">
+        <li class="dropdown-submenu">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Penalized models</a>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <a href="penalized_models.html">How it works?</a>
+            </li>
+            <li class="dropdown-header">- Code -</li>
+            <li>
+              <a href="PM_L1.html">LASSO regularization</a>
+            </li>
+            <li>
+              <a href="PM_L2.html">RIDGE regularization</a>
+            </li>
+            <li>
+              <a href="PM_L1et2.html">Elasticnet regularization</a>
+            </li>
+            <li class="dropdown-header">- Parameters to consider -</li>
+            <li>
+              <a href="Construction_page.html">Performance metrics</a>
+            </li>
+            <li>
+              <a href="Construction_page.html">Sampling procedure</a>
+            </li>
+          </ul>
+        </li>
+        <li class="divider"></li>
+        <li>
+          <a href="Construction_page.html">Random Tree</a>
+        </li>
+        <li>
+          <a href="Construction_page.html">Random Forest</a>
+        </li>
+        <li class="divider"></li>
+        <li>
+          <a href="Construction_page.html">Gradient boosting</a>
+        </li>
+        <li class="divider"></li>
+        <li>
+          <a href="Construction_page.html">Suport Vector Machine</a>
+        </li>
+        <li class="divider"></li>
+        <li>
+          <a href="Construction_page.html">Neural network</a>
+        </li>
+        <li class="divider"></li>
+        <li>
+          <a href="Construction_page.html">Naive Bayesian Model</a>
+        </li>
+      </ul>
+    </li>
+    <li class="dropdown-submenu">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Longitudinal</a>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          <a href="Construction_page.html">Mixed Models</a>
+        </li>
+        <li class="divider"></li>
+        <li>
+          <a href="Construction_page.html">Lasso Mixed models</a>
+        </li>
+      </ul>
+    </li>
+    <li class="dropdown-submenu">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Survival</a>
+      <ul class="dropdown-menu" role="menu">
+        <li class="dropdown-submenu">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Penalized models</a>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <a href="penalized_models.html">How it works?</a>
+            </li>
+            <li class="dropdown-header">- Code -</li>
+            <li>
+              <a href="PM_L1.html">LASSO regularization</a>
+            </li>
+            <li>
+              <a href="PM_L2.html">RIDGE regularization</a>
+            </li>
+            <li>
+              <a href="PM_L1et2.html">Elasticnet regularization</a>
+            </li>
+            <li class="dropdown-header">- Parameters to consider -</li>
+            <li>
+              <a href="Construction_page.html">Performance metrics</a>
+            </li>
+            <li>
+              <a href="Construction_page.html">Sampling procedure</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fas fa-check-circle"></span>
+     
+    Meta-knowledge
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Construction_page.html">Performance metrics</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="Construction_page.html">Sampling procedure</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="dataset_page.html">
+    <span class="fas fa-book"></span>
+     
+    Datasets
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Elasticnet penalized regression</h1>
+
+</div>
+
+
+<style>
+  h4{font-size: 35px !important;
+    color: #000000 !important;
+    border-style: solid;
+    border-color: #000000;
+    background-color: #FFFFFF;
+    text-align: center;
+    margin-top: 5px;
+  }
+</style>
+<style>
+  h2{font-size: 35px !important;
+    color: #d62d20 !important;
+    background-color: #FFFFFF;
+    text-align: center;
+    margin-top: 5px;
+  }
+</style>
+<h4>
+Summary of the method
+</h4>
+<p>Elasticnet models can apply both L1 and L2 regularization to achieve a sparse solution. <span class="citation">[1]</span><br />
+<br> The elasticnet penalty can be modelled as:</p>
+<p><span class="math inline">\(\lambda\)</span> <span class="math inline">\(\sum_{j = 1}^{p}\)</span>[<span class="math inline">\(\frac{1}{2}\)</span>(1 - <span class="math inline">\(\alpha\)</span>) * <span class="math inline">\(\beta_{j}^{2}\)</span> + <span class="math inline">\(\alpha\)</span> |<span class="math inline">\(\beta_{j}\)</span>|]</p>
+<p>Where <span class="math inline">\(\lambda\)</span> represent the regularization parameter, <span class="math inline">\(\alpha\)</span> the mixing percentage between L1 and L2 regularization and <span class="math inline">\(\beta_{j}\)</span> the regression coefficient associated to the j<sup>th</sup> variable.</p>
+<p>The <span class="math inline">\(\alpha\)</span> parameter allows to apply a <span class="math inline">\(\lambda\)</span> weighting using L1 &amp; L2 regularization. <br></p>
+<p>More comprehensive details can be found <a href="https://www.jstatsoft.org/article/view/v033i01">HERE</a>.</p>
+<h4>
+Code
+</h4>
+<p>Elasticnet methods is divided on 3 steps:<br />
+<br> <strong>(1)</strong> A data management step where variables are scaled, so that a selection between comparable coefficient can be operated, and representative training and validation datasets are defined.<br />
+<br> <strong>(2)</strong> A training step where the optimal combination of <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\alpha\)</span> is defined.<br />
+The optimal <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\alpha\)</span> combination shows the best predictive performance among several combinations. Predictive performance are calculated using a sampling procedure. The sampling procedure allows to define <span class="math inline">\(\beta\)</span> coefficients in a subset of the data and define its predictive performance on another subset of the data.<br />
+<br> <strong>(3)</strong> A validation step where the performance of the model using the optimal <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\alpha\)</span> combination is calculated on new data that were not involved in the training step.</p>
+<p>The rationale for choosing a scaling procedure, the predictive performance metric, what can be considered as optimal, between sampling methodologies and weighting are developed <a href="https://benjamlandre.github.io/MLClub/">HERE</a>, <a href="https://benjamlandre.github.io/MLClub/">HERE</a>, <a href="https://benjamlandre.github.io/MLClub/">HERE</a>, <a href="https://benjamlandre.github.io/MLClub/">HERE</a> and <a href="https://benjamlandre.github.io/MLClub/">HERE</a>, respectively.</p>
+<p>The code below shows methodologies to select the <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\alpha\)</span> combination, with the best predictive performances for common metrics, with 2 different un-weighted sampling methodologies (cross-validation, repeated cross-validation) and for 3 different types of outcomes (binary, continuous, time-to-event).<br />
+<br> Code uses the Heart Failure Prediction data.Information about the dataset can be found in this website (<a href="https://benjamlandre.github.io/MLClub/index.html">HERE</a>) or on the kaggle site (<a href="https://www.kaggle.com/andrewmvd/heart-failure-clinical-data?select=heart_failure_clinical_records_dataset.csv">HERE</a>).</p>
+<hr />
+<div id="section" class="section level3">
+<h3></h3>
+<h2>
+Cross-validated Elasticnet model
+</h2>
+</div>
+<div id="section-1" class="section level3 tabset tabset-fade tabset-pills">
+<h3></h3>
+<div id="y-is-binary" class="section level4">
+<h4>Y is binary</h4>
+<p><strong>Summary of the different steps</strong><br />
+<strong>(1)</strong> <span style="color:#d62d20">Data management</span><br />
+Continuous data should be scaled<br />
+Dummy variables must be created for categorical variables<br />
+Training and testing data sets must be created</p>
+<p><strong>(2)</strong> <span style="color:#d62d20">Training of the data set</span><br />
+Find <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\alpha\)</span> which minimize cross-validation measure (deviance for binary outcomes)<br />
+Predict on training dataset using the optimal <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\alpha\)</span> combination</p>
+<p><strong>(3)</strong> <span style="color:#d62d20">Predicting on testing data set</span><br />
+Predict on testing dataset</p>
+<hr />
+<p><strong>(1) Data management</strong></p>
+<p><strong>Parameters to consider</strong><br />
+- Scaling methodology <a href="https://www.google.fr">LINK</a>.<br />
+- Weighting of the sampling <a href="https://www.google.fr">LINK</a>.</p>
+<p>The Heart Failure Prediction data was used. The outcome was death at the end of the follow-up and predictors were all others variables. More information about the dataset can be found in the dataset tab (<a href="https://WWW.google.fr">HERE</a>) or on the kaggle site (<a href="https://www.kaggle.com/andrewmvd/heart-failure-clinical-data?select=heart_failure_clinical_records_dataset.csv">HERE</a>).</p>
+<pre class="r"><code>library(readr)
+library(caret)
+
+heart &lt;- as.data.frame(read_csv(&quot;heart_failure_clinical_records_dataset.csv&quot;, 
+                                col_types = cols(DEATH_EVENT = col_factor(levels = c(&quot;0&quot;, &quot;1&quot;)),
+                                                 anaemia = col_factor(levels = c(&quot;0&quot;, &quot;1&quot;)),
+                                                 sex = col_factor(levels = c(&quot;0&quot;, &quot;1&quot;)),
+                                                 smoking = col_factor(levels = c(&quot;0&quot;, &quot;1&quot;)),
+                                                 diabetes = col_factor(levels = c(&quot;0&quot;, &quot;1&quot;)),
+                                                 high_blood_pressure = col_factor(levels = c(&quot;0&quot;,&quot;1&quot;)))))
+
+# Data management of continous variables ----------------------------------------------------
+
+# I) Log transformation for: creatinine_phosphokinase &amp; serum_creatinine
+heart$CP_log &lt;- log(heart$creatinine_phosphokinase)
+heart$SC_log &lt;- log(heart$serum_creatinine)
+
+# II) Scaling using population summary statistics
+Cols &lt;- names(heart[, c(1, 5, 7, 9, 14, 15)])
+heart[Cols] &lt;- lapply(heart[Cols], scale)
+
+# III) Remove unused variables
+heart &lt;- heart[,-c(3, 8, 12)]
+
+# Sampling ----------------------------------------------------------------------------------
+
+# I) Unweighted sampling
+set.seed(11)
+trainIndex &lt;- createDataPartition(heart$DEATH_EVENT, p = .7, 
+                                  list = FALSE, 
+                                  times = 1)
+heart_train &lt;- heart[trainIndex,]
+heart_test  &lt;- heart[-trainIndex,]
+
+# Data management of categorical variables --------------------------------------------------
+
+# I) Create dummy variables
+
+# II) Separate outcome and predictors in different dataset
+x_train &lt;- heart_train[,-c(10)]
+x_test &lt;- heart_test[,-c(10)]
+
+y_train &lt;- heart_train$DEATH_EVENT
+y_test &lt;- heart_test$DEATH_EVENT
+
+# Data management of categorical variables --------------------------------------------------
+
+# I) Create dummy variables
+x_train_dm &lt;- model.matrix( ~ .-1, data = x_train, contrasts.arg = lapply(x_train[,c(2, 3, 5, 8, 9)], contrasts, contrasts=FALSE))
+x_test_dm &lt;-  model.matrix( ~ .-1, data = x_test, contrasts.arg = lapply(x_test[,c(2, 3, 5, 8, 9)], contrasts, contrasts=FALSE))</code></pre>
+<hr />
+<p><strong>(2) Training of the data set</strong></p>
+<p><strong>Parameters to consider</strong><br />
+- nfolds: the number of cross-validation (default = 10).<br />
+- standardize: standardize the x variables (default = TRUE).<br />
+- <span class="math inline">\(\alpha\)</span>: the mixing parameter.<br />
+- <span class="math inline">\(\lambda\)</span>: the choice of optimal <span class="math inline">\(\lambda\)</span> to choose (minimal or in 1SE range of the minimal <span class="math inline">\(\lambda\)</span>). see <a href="https://stats.stackexchange.com/questions/138569/why-is-lambda-within-one-standard-error-from-the-minimum-is-a-recommended-valu">HERE</a><br />
+- choice of cross-validation error measure (default for binary outcome = deviance)</p>
+<pre class="r"><code>library(glmnet)
+set.seed(11)
+# Cross-validation of Ridge model
+
+ControlParameters &lt;- trainControl(method = &quot;cv&quot;,
+                                  number = 10)
+
+Hyperspace_param &lt;- expand.grid(alpha = seq(0, 1, by = 0.1),
+                                lambda = seq(0.001,0.1,by = 0.001))
+
+CV.Elastic &lt;- train(x = x_train_dm,
+                    y = y_train,
+                    trControl = ControlParameters,
+                    tuneGrid = Hyperspace_param,
+                    method = &quot;glmnet&quot;)
+
+# Change of cross-validation measure with log(lambda)
+plot(CV.Elastic)</code></pre>
+<p><img src="PM_L1et2_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code>CV.Elastic$bestTune</code></pre>
+<pre><code>##     alpha lambda
+## 465   0.4  0.065</code></pre>
+<pre><code>## 17 x 1 sparse Matrix of class &quot;dgCMatrix&quot;
+##                                 1
+## (Intercept)          -0.864931646
+## age                   0.318143439
+## anaemia0             -0.001340032
+## anaemia1              0.001125200
+## diabetes0             .          
+## diabetes1             .          
+## ejection_fraction    -0.476204071
+## high_blood_pressure0 -0.050657622
+## high_blood_pressure1  0.048845298
+## platelets             .          
+## serum_sodium         -0.217717131
+## sex0                  .          
+## sex1                  .          
+## smoking0              .          
+## smoking1              .          
+## CP_log                0.003370751
+## SC_log                0.313840998</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = DEATH_EVENT ~ ., family = &quot;binomial&quot;, data = heart_train)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.9337  -0.7740  -0.4368   0.7755   2.5476  
+## 
+## Coefficients:
+##                      Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)          -1.37162    0.42808  -3.204 0.001355 ** 
+## age                   0.61276    0.18396   3.331 0.000866 ***
+## anaemia1              0.54316    0.37383   1.453 0.146238    
+## diabetes1             0.13736    0.36256   0.379 0.704784    
+## ejection_fraction    -0.84709    0.22100  -3.833 0.000127 ***
+## high_blood_pressure1  0.41191    0.38111   1.081 0.279780    
+## platelets            -0.03141    0.19051  -0.165 0.869033    
+## serum_sodium         -0.39579    0.19284  -2.052 0.040124 *  
+## sex1                 -0.39414    0.43071  -0.915 0.360143    
+## smoking1              0.26720    0.43239   0.618 0.536607    
+## CP_log                0.29477    0.18574   1.587 0.112503    
+## SC_log                0.56031    0.20626   2.717 0.006597 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 265.26  on 210  degrees of freedom
+## Residual deviance: 204.30  on 199  degrees of freedom
+## AIC: 228.3
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<p><img src="PM_L1et2_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code># Prediction and summary statistics in training dataset
+heart_train$DEATH_EVENT_pred &lt;- predict(CV.Elastic, type = &quot;raw&quot;, s = CV.Elastic$bestTune$lambda, alpha = CV.Elastic$bestTune$alpha)
+confusionMatrix(factor(heart_train$DEATH_EVENT), factor(heart_train$DEATH_EVENT_pred))</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction   0   1
+##          0 136   7
+##          1  43  25
+##                                           
+##                Accuracy : 0.763           
+##                  95% CI : (0.6998, 0.8187)
+##     No Information Rate : 0.8483          
+##     P-Value [Acc &gt; NIR] : 0.9996          
+##                                           
+##                   Kappa : 0.3701          
+##                                           
+##  Mcnemar&#39;s Test P-Value : 7.431e-07       
+##                                           
+##             Sensitivity : 0.7598          
+##             Specificity : 0.7812          
+##          Pos Pred Value : 0.9510          
+##          Neg Pred Value : 0.3676          
+##              Prevalence : 0.8483          
+##          Detection Rate : 0.6445          
+##    Detection Prevalence : 0.6777          
+##       Balanced Accuracy : 0.7705          
+##                                           
+##        &#39;Positive&#39; Class : 0               
+## </code></pre>
+<hr />
+<p><strong>(3)Predicting on testing data set</strong></p>
+<p><strong>Parameters to consider</strong><br />
+- Are previous steps correct ?</p>
+<pre class="r"><code># Prediction and summary statistics in testing dataset
+library(caret)
+A &lt;- predict(CV.Elastic$finalModel, newx = x_test_dm, s = CV.Elastic$bestTune$lambda, type = &quot;class&quot;)
+confusionMatrix(factor(heart_test$DEATH_EVENT), factor(A))</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction  0  1
+##          0 57  3
+##          1 22  6
+##                                          
+##                Accuracy : 0.7159         
+##                  95% CI : (0.6098, 0.807)
+##     No Information Rate : 0.8977         
+##     P-Value [Acc &gt; NIR] : 0.9999996      
+##                                          
+##                   Kappa : 0.2006         
+##                                          
+##  Mcnemar&#39;s Test P-Value : 0.0003182      
+##                                          
+##             Sensitivity : 0.7215         
+##             Specificity : 0.6667         
+##          Pos Pred Value : 0.9500         
+##          Neg Pred Value : 0.2143         
+##              Prevalence : 0.8977         
+##          Detection Rate : 0.6477         
+##    Detection Prevalence : 0.6818         
+##       Balanced Accuracy : 0.6941         
+##                                          
+##        &#39;Positive&#39; Class : 0              
+## </code></pre>
+<hr />
+</div>
+<div id="y-is-continuous" class="section level4">
+<h4>Y is continuous</h4>
+<p><strong>Summary of the different steps</strong><br />
+<strong>(1)</strong> <span style="color:#d62d20">Data management</span><br />
+Continuous data should be scaled<br />
+Dummy variables must be created for categorical variables<br />
+Training and testing data sets must be created</p>
+<p><strong>(2)</strong> <span style="color:#d62d20">Training of the data set</span><br />
+Find <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\alpha\)</span> which minimize cross-validation error measure (mean squared error for continuous outcomes)<br />
+Predict on training dataset using the optimal <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\alpha\)</span> combination</p>
+<p><strong>(3)</strong> <span style="color:#d62d20">Predicting on testing data set</span><br />
+Predict on testing dataset</p>
+<hr />
+<p><strong>(1) Data management</strong></p>
+<p><strong>Parameters to consider</strong><br />
+- Scaling methodology <a href="https://www.google.fr">LINK</a>.<br />
+- Weighting of the sampling <a href="https://www.google.fr">LINK</a>.</p>
+<p>The Heart Failure Prediction data was used. The outcome was ejection fraction and predictors were all others variables except death. More information about the dataset can be found in the dataset tab (<a href="https://WWW.google.fr">HERE</a>) or on the kaggle site (<a href="https://www.kaggle.com/andrewmvd/heart-failure-clinical-data?select=heart_failure_clinical_records_dataset.csv">HERE</a>).</p>
+<hr />
+<p><strong>(2) Training of the data set</strong></p>
+<p><strong>Parameters to consider</strong><br />
+- nfolds: the number of cross-validation (default = 10).<br />
+- standardize: standardize the x variables (default = TRUE).<br />
+- <span class="math inline">\(\alpha\)</span>: the mixing parameter.<br />
+- <span class="math inline">\(\lambda\)</span>: the choice of optimal <span class="math inline">\(\lambda\)</span> to choose (minimal or in 1SE range of the minimal <span class="math inline">\(\lambda\)</span>). see <a href="https://stats.stackexchange.com/questions/138569/why-is-lambda-within-one-standard-error-from-the-minimum-is-a-recommended-valu">HERE</a><br />
+- choice of cross-validation error measure (default for continuous outcome = mean squared error)<a href="https://stats.stackexchange.com/questions/131267/how-to-interpret-error-measures">HERE</a></p>
+<hr />
+<p><strong>(3)Predicting on testing data set</strong></p>
+<p><strong>Parameters to consider</strong><br />
+- Are previous steps correct ?</p>
+<hr />
+</div>
+<div id="y-is-a-time-to-event-outcome" class="section level4">
+<h4>Y is a time-to-event outcome</h4>
+<p><strong>Summary of the different steps</strong><br />
+<strong>(1)</strong> <span style="color:#d62d20">Data management</span><br />
+Continuous data should be scaled<br />
+Dummy variables must be created for categorical variables<br />
+Training and testing data sets must be created</p>
+<p><strong>(2)</strong> <span style="color:#d62d20">Training of the data set</span><br />
+Find <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\alpha\)</span> which minimize cross-validation error measure (partial likelihood deviance for time-to-event outcomes)<br />
+Predict on training dataset using the optimal <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(\alpha\)</span> combination</p>
+<p><strong>(3)</strong> <span style="color:#d62d20">Predicting on testing data set</span><br />
+Predict on testing dataset</p>
+<hr />
+<p><strong>(1) Data management</strong></p>
+<p><strong>Parameters to consider</strong><br />
+- Scaling methodology <a href="https://www.google.fr">LINK</a>.<br />
+- Weighting of the sampling <a href="https://www.google.fr">LINK</a>.<br />
+- Choice of time-scale for time-to-event variable.</p>
+<p>The Heart Failure Prediction data was used. The outcome was death as a time-to-event data and predictors were all others variables. More information about the dataset can be found in the dataset tab (<a href="https://benjamlandre.github.io/MLClub/dataset_page.html">HERE</a>) or on the kaggle site (<a href="https://www.kaggle.com/andrewmvd/heart-failure-clinical-data?select=heart_failure_clinical_records_dataset.csv">HERE</a>).</p>
+<hr />
+<p><strong>(2) Training of the data set</strong></p>
+<p><strong>Parameters to consider</strong><br />
+- nfolds: the number of cross-validation (default = 10).<br />
+- standardize: standardize the x variables (default = TRUE).<br />
+- <span class="math inline">\(\alpha\)</span>: the mixing parameter.<br />
+- <span class="math inline">\(\lambda\)</span>: the choice of optimal <span class="math inline">\(\lambda\)</span> to choose (minimal or in 1SE range of the minimal <span class="math inline">\(\lambda\)</span>). see <a href="https://stats.stackexchange.com/questions/138569/why-is-lambda-within-one-standard-error-from-the-minimum-is-a-recommended-valu">HERE</a><br />
+- choice of cross-validation error measure (default for continuous outcome = mean squared error)<a href="https://stats.stackexchange.com/questions/131267/how-to-interpret-error-measures">HERE</a></p>
+<pre class="r"><code># Prediction and summary statistics in training dataset</code></pre>
+<hr />
+<p><strong>(3)Predicting on testing data set</strong></p>
+<p><strong>Parameters to consider</strong><br />
+- Are previous steps correct ?</p>
+<pre class="r"><code># Prediction and summary statistics in testing dataset</code></pre>
+<hr />
+</div>
+</div>
+<div id="section-2" class="section level3">
+<h3></h3>
+<h2>
+Repeated cross-validated LASSO model
+</h2>
+<p>Coming soon.</p>
+<hr />
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-jstatsoft_glmnet">
+<p>[1] Friedman, Hastie, Tibshirani, “Regularization Paths for Generalized Linear Models via Coordinate Descent,” vol. 11, no. 1, Feb. 2010, doi: <a href="https://doi.org/10.18637/jss.v033.i01">10.18637/jss.v033.i01</a>. [Online]. Available: <a href="http://dx.doi.org/10.18637/jss.v033.i01">http://dx.doi.org/10.18637/jss.v033.i01</a></p>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

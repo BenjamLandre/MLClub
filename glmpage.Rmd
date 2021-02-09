@@ -1,10 +1,10 @@
 ---
 title: "Generalized Linear Model"
 output:
-    html_document:
-      toc: true
-      toc_float: true 
-      toc_depth: 2
+  html_document:
+    toc: yes
+    toc_float: yes
+    toc_depth: 2
 ---   
 <style>
   h1{font-size: 35px !important;
@@ -23,16 +23,18 @@ output:
     text-align: center;
     margin-top: 5px;
   }
-</style>  
+</style>
 
 
 <h1> Summary of the method </h1>
 
 Costa Rica (UK: /ˌkɒstə ˈriːkə/, US: /ˌkoʊstə/ (About this soundlisten); Spanish: [ˈkosta ˈrika]; literally "Rich Coast"), officially the Republic of Costa Rica (Spanish: República de Costa Rica), is a country in Central America, bordered by Nicaragua to the north, the Caribbean Sea to the northeast, Panama to the southeast, the Pacific Ocean to the southwest, and Ecuador to the south of Cocos Island. It has a population of around 5 million[5][6] in a land area of 51,060 square kilometers (19,714 square miles). An estimated 333,980 people live in the capital and largest city, San José, with around 2 million people in the surrounding metropolitan area.  
 
-![](voyage-nature-costa-rica-sylvain-lefebvre.jpg)
+![](Decision_tree.gif)
   
 The sovereign state is a unitary presidential constitutional republic. It is known for its long-standing and stable democracy, and for its highly educated workforce, most of whom speak English.[11] The country spends roughly 6.9% of its budget (2016) on education, compared to a global average of 4.4%.[11] Its economy, once heavily dependent on agriculture, has diversified to include sectors such as finance, corporate services for foreign companies, pharmaceuticals, and ecotourism. Many foreign manufacturing and services companies operate in Costa Rica's Free Trade Zones (FTZ) where they benefit from investment and tax incentives.[12]
+
+![](RandomForest.png)
 
 More comprehensive details can be found [HERE](https://www.google.fr/).       
 <br>    

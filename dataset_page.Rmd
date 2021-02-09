@@ -1,0 +1,97 @@
+---
+title: "ML datasets"
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+    toc_depth: 2
+---
+
+# Heart Failure Prediction dataset    
+
+Survival data of 300 participants, including socio-demographic (age, sex), life-style (smoking), medical (anemia, diabetes, high blood pressure) and biological (creatinine phospo., ejection fraction, platelets, sodium, creatinine) variables.   
+
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+</style>
+<table class="tg">
+<thead>
+  <tr>
+    <th class="tg-c3ow" colspan="2">Individuals</th>
+    <th class="tg-c3ow" colspan="6">Variables</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-c3ow">Total</td>
+    <td class="tg-c3ow"># row / ID</td>
+    <td class="tg-c3ow">Total</td>
+    <td class="tg-c3ow">Continuous</td>
+    <td class="tg-c3ow">Count</td>
+    <td class="tg-c3ow">Binary</td>
+    <td class="tg-c3ow">Categorical 3+</td>
+    <td class="tg-c3ow">Survival</td>
+  </tr>
+  <tr>
+    <td class="tg-c3ow">300</td>
+    <td class="tg-c3ow">1</td>
+    <td class="tg-c3ow">12</td>
+    <td class="tg-c3ow">6</td>
+    <td class="tg-c3ow">0</td>
+    <td class="tg-c3ow">5</td>
+    <td class="tg-c3ow">0</td>
+    <td class="tg-c3ow">1</td>
+  </tr>
+</tbody>
+</table>    
+
+The dataset and more information can be found in [Kaggle website](https://www.kaggle.com/andrewmvd/heart-failure-clinical-data?select=heart_failure_clinical_records_dataset.csv).       
+
+# Cardiovascular disease dataset    
+
+Data for 99999 individuals, data includes age, sex, height, weight, systolic and diastolic blood pressure, cholesterol, glucose, smoking status, alcohol intake, physical activity and CVD status (presence or absence).    
+
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+</style>
+<table class="tg">
+<thead>
+  <tr>
+    <th class="tg-c3ow" colspan="2">Individuals</th>
+    <th class="tg-c3ow" colspan="6">Variables</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-c3ow">Total</td>
+    <td class="tg-c3ow"># row / ID</td>
+    <td class="tg-c3ow">Total</td>
+    <td class="tg-c3ow">Continuous</td>
+    <td class="tg-c3ow">Count</td>
+    <td class="tg-c3ow">Binary</td>
+    <td class="tg-c3ow">Categorical 3+</td>
+    <td class="tg-c3ow">Survival</td>
+  </tr>
+  <tr>
+    <td class="tg-c3ow">99 999</td>
+    <td class="tg-c3ow">1</td>
+    <td class="tg-c3ow">12</td>
+    <td class="tg-c3ow">5</td>
+    <td class="tg-c3ow">0</td>
+    <td class="tg-c3ow">5</td>
+    <td class="tg-c3ow">2</td>
+    <td class="tg-c3ow">0</td>
+  </tr>
+</tbody>
+</table>    
+The dataset and more information can be found in [Kaggle website](https://www.kaggle.com/sulianova/cardiovascular-disease-dataset). 

@@ -11,7 +11,7 @@
 
 
 
-<title>Page1</title>
+<title>ML datasets</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +19,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -261,6 +264,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -268,6 +334,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -485,33 +561,174 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Page1</h1>
+<h1 class="title toc-ignore">ML datasets</h1>
 
 </div>
 
 
-<div id="r-markdow" class="section level2">
-<h2>R Markdow</h2>
-<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
-<pre class="r"><code>summary(cars)</code></pre>
-<pre><code>##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00</code></pre>
+<div id="heart-failure-prediction-dataset" class="section level1">
+<h1>Heart Failure Prediction dataset</h1>
+<p>Survival data of 300 participants, including socio-demographic (age, sex), life-style (smoking), medical (anemia, diabetes, high blood pressure) and biological (creatinine phospo., ejection fraction, platelets, sodium, creatinine) variables.</p>
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+</style>
+<table class="tg">
+<thead>
+<tr>
+<th class="tg-c3ow" colspan="2">
+Individuals
+</th>
+<th class="tg-c3ow" colspan="6">
+Variables
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tg-c3ow">
+Total
+</td>
+<td class="tg-c3ow">
+# row / ID
+</td>
+<td class="tg-c3ow">
+Total
+</td>
+<td class="tg-c3ow">
+Continuous
+</td>
+<td class="tg-c3ow">
+Count
+</td>
+<td class="tg-c3ow">
+Binary
+</td>
+<td class="tg-c3ow">
+Categorical 3+
+</td>
+<td class="tg-c3ow">
+Survival
+</td>
+</tr>
+<tr>
+<td class="tg-c3ow">
+300
+</td>
+<td class="tg-c3ow">
+1
+</td>
+<td class="tg-c3ow">
+12
+</td>
+<td class="tg-c3ow">
+6
+</td>
+<td class="tg-c3ow">
+0
+</td>
+<td class="tg-c3ow">
+5
+</td>
+<td class="tg-c3ow">
+0
+</td>
+<td class="tg-c3ow">
+1
+</td>
+</tr>
+</tbody>
+</table>
+<p>The dataset and more information can be found in <a href="https://www.kaggle.com/andrewmvd/heart-failure-clinical-data?select=heart_failure_clinical_records_dataset.csv">Kaggle website</a>.</p>
 </div>
-<div id="including-plots" class="section level2">
-<h2>Including Plots</h2>
-<p>You can also embed plots, for example:</p>
-<p><img src="page1_files/figure-html/pressure-1.png" width="672" /></p>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
+<div id="cardiovascular-disease-dataset" class="section level1">
+<h1>Cardiovascular disease dataset</h1>
+<p>Data for 99999 individuals, data includes age, sex, height, weight, systolic and diastolic blood pressure, cholesterol, glucose, smoking status, alcohol intake, physical activity and CVD status (presence or absence).</p>
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-c3ow{border-color:inherit;text-align:center;vertical-align:top}
+</style>
+<table class="tg">
+<thead>
+<tr>
+<th class="tg-c3ow" colspan="2">
+Individuals
+</th>
+<th class="tg-c3ow" colspan="6">
+Variables
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tg-c3ow">
+Total
+</td>
+<td class="tg-c3ow">
+# row / ID
+</td>
+<td class="tg-c3ow">
+Total
+</td>
+<td class="tg-c3ow">
+Continuous
+</td>
+<td class="tg-c3ow">
+Count
+</td>
+<td class="tg-c3ow">
+Binary
+</td>
+<td class="tg-c3ow">
+Categorical 3+
+</td>
+<td class="tg-c3ow">
+Survival
+</td>
+</tr>
+<tr>
+<td class="tg-c3ow">
+99 999
+</td>
+<td class="tg-c3ow">
+1
+</td>
+<td class="tg-c3ow">
+12
+</td>
+<td class="tg-c3ow">
+5
+</td>
+<td class="tg-c3ow">
+0
+</td>
+<td class="tg-c3ow">
+5
+</td>
+<td class="tg-c3ow">
+2
+</td>
+<td class="tg-c3ow">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<p>The dataset and more information can be found in <a href="https://www.kaggle.com/sulianova/cardiovascular-disease-dataset">Kaggle website</a>.</p>
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -544,6 +761,32 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

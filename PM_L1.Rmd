@@ -1,0 +1,545 @@
+---
+title: "LASSO penalized regression"
+output: html_document
+references:
+- id: jstatsoft_glmnet
+  title: Regularization Paths for Generalized Linear Models via Coordinate Descent
+  author:
+  - family: Friedman, Hastie, Tibshirani
+  volume: 11
+  URL: 'http://dx.doi.org/10.18637/jss.v033.i01'
+  DOI: 10.18637/jss.v033.i01
+  issue: 1
+  publisher: Nature Publishing Group
+  type: article-journal
+  issued:
+    year: 2010
+    month: 2
+csl: ieee.csl
+---
+<style>
+  h4{font-size: 35px !important;
+    color: #000000 !important;
+    border-style: solid;
+    border-color: #000000;
+    background-color: #FFFFFF;
+    text-align: center;
+    margin-top: 5px;
+  }
+</style>  
+<style>
+  h2{font-size: 35px !important;
+    color: #d62d20 !important;
+    background-color: #FFFFFF;
+    text-align: center;
+    margin-top: 5px;
+  }
+</style>
+
+<h4> Summary of the method </h4>    
+
+Elasticnet models can apply both L1 and L2 regularization to achieve a sparse solution. [@jstatsoft_glmnet]   
+<br>
+The elasticnet penalty can be modelled as:    
+
+$\lambda$ $\sum_{j = 1}^{p}$[$\frac{1}{2}$(1 - $\alpha$) * $\beta_{j}^{2}$ + $\alpha$ |$\beta_{j}$|]   
+
+Where $\lambda$ represent the regularization parameter, $\alpha$ the mixing percentage between L1 and L2 regularization and $\beta_{j}$ the regression coefficient associated to the j^th^ variable.
+
+For $\alpha$=1, a LASSO model is defined and a L1 regularization is applied.  
+<br>
+The L1 regularization shrink the coefficient uniformly as $\lambda$ increases.    
+LASSO models are particularly interesting when among a great number of predictors, only a few have non-zero coefficients.   
+They are also used when collinearity between predictors is involved.[@jstatsoft_glmnet]   
+
+More comprehensive details can be found [HERE](https://www.jstatsoft.org/article/view/v033i01).       
+   
+<h4> Code </h4>   
+LASSO methods is divided on 3 steps:    
+<br>
+**(1)**   A data management step where variables are scaled, so that a selection between comparable coefficient can be operated, and representative training and validation datasets are defined.   
+**(2)**   A training step where the optimal $\lambda$ is defined.   
+The optimal $\lambda$ shows the best predictive performance among several $\lambda$. Predictive performance are calculated using a sampling procedure. The sampling procedure allows to define $\beta$ coefficients in a subset of the data and define its predictive performance on another subset of the data.    
+**(3)**   A validation step where the performance of the model using the optimal $\lambda$ is calculated on new data that were not involved in the training step.
+
+The rationale for choosing a scaling procedure, the predictive performance metric, what can be considered as optimal, between sampling methodologies and weighting are developed [HERE](https://benjamlandre.github.io/MLClub/), [HERE](https://benjamlandre.github.io/MLClub/), [HERE](https://benjamlandre.github.io/MLClub/), [HERE](https://benjamlandre.github.io/MLClub/) and [HERE](https://benjamlandre.github.io/MLClub/), respectively.   
+
+The code below shows methodologies to select the $\lambda$, with the best predictive performances for common metrics, with 2 different un-weighted sampling methodologies (cross-validation, repeated cross-validation) and for 3 different types of outcomes (binary, continuous, time-to-event).         
+<br>
+Code uses the Heart Failure Prediction data. Information about the dataset can be found in this website ([HERE](https://benjamlandre.github.io/MLClub/dataset_page.html)) or on the kaggle site ([HERE](https://www.kaggle.com/andrewmvd/heart-failure-clinical-data?select=heart_failure_clinical_records_dataset.csv)). 
+
+***  
+
+###
+<h2>Cross-validated LASSO model</h2>
+
+### {.tabset .tabset-fade .tabset-pills}      
+
+#### Y is binary  
+
+**Summary of the different steps**  
+**(1)**    <span style="color:#d62d20">Data management</span>    
+Continuous data should be scaled    
+Dummy variables must be created for categorical variables   
+Training and validation data sets must be created   
+  
+**(2)**    <span style="color:#d62d20">Training step</span>    
+Find $\lambda$ which minimize cross-validation measure (deviance for binary outcomes)    
+Predict on training dataset using the optimal $\lambda$ value   
+  
+**(3)**    <span style="color:#d62d20">Validation step</span>    
+Predict on validation dataset       
+  
+***
+
+**(1) Data management**  
+
+**Parameters to consider**    
+- Scaling methodology [LINK](https://www.google.fr).    
+- Weighting of the sampling [LINK](https://www.google.fr).    
+
+The Heart Failure Prediction data was used. The outcome was death at the end of the follow-up and predictors were all others variables.
+More information about the dataset can be found in the dataset tab ([HERE](https://WWW.google.fr)) or on the kaggle site ([HERE](https://www.kaggle.com/andrewmvd/heart-failure-clinical-data?select=heart_failure_clinical_records_dataset.csv)).
+
+```{r, message = FALSE}
+library(readr)
+library(caret)
+
+heart <- as.data.frame(read_csv("heart_failure_clinical_records_dataset.csv", 
+                                col_types = cols(anaemia = col_factor(levels = c("0", "1")),                                                  
+                                                 sex = col_factor(levels = c("0", "1")),                                                  
+                                                 smoking = col_factor(levels = c("0", "1")), 
+                                                 diabetes = col_factor(levels = c("0", "1")), 
+                                                 high_blood_pressure = col_factor(levels = c("0","1")))))
+
+# Data management of continous variables ----------------------------------------------------
+
+# I) Log transformation for: creatinine_phosphokinase & serum_creatinine
+heart$CP_log <- log(heart$creatinine_phosphokinase)
+heart$SC_log <- log(heart$serum_creatinine)
+
+# II) Scaling using population summary statistics
+Cols <- names(heart[, c(1, 5, 7, 9, 14, 15)])
+heart[Cols] <- lapply(heart[Cols], scale)
+
+# III) Remove unused variables
+heart <- heart[,-c(3, 8, 12)]
+
+# Sampling ----------------------------------------------------------------------------------
+
+# I) Unweighted sampling
+set.seed(11)
+trainIndex <- createDataPartition(heart$DEATH_EVENT, p = .7, 
+                                  list = FALSE, 
+                                  times = 1)
+heart_train <- heart[trainIndex,]
+heart_test  <- heart[-trainIndex,]
+
+# Data management of categorical variables --------------------------------------------------
+
+# I) Create dummy variables
+
+# for training dataset
+train_dm <- dummyVars(DEATH_EVENT ~ ., data = heart_train)
+train_dm <- predict(train_dm, newdata = heart_train)
+
+# for validation dataset
+test_dm <- dummyVars(DEATH_EVENT ~ ., data = heart_test)
+test_dm <- predict(test_dm, newdata = heart_test)
+```
+
+***   
+
+**(2) Training of the data set** 
+
+**Parameters to consider**    
+-   nfolds: the number of cross-validation (default = 10).    
+-   standardize: standardize the x variables (default = TRUE).        
+-   alpha: the mixing parameter (alpha = 1 = LASSO penalty).    
+-   $\lambda$: the choice of optimal $\lambda$ to choose (minimal or in 1SE range of the minimal $\lambda$). see [HERE](https://stats.stackexchange.com/questions/138569/why-is-lambda-within-one-standard-error-from-the-minimum-is-a-recommended-valu)       
+-   choice of cross-validation error measure (default for binary outcome = deviance)    
+
+```{r, message = F}
+library(glmnet)
+
+# Cross-validation of LASSO model
+CV.LASSO <- cv.glmnet(x = train_dm,
+                y = heart_train$DEATH_EVENT,
+                family = "binomial",
+                nfolds = 10,
+                standardize = F,
+                alpha = 1,
+                type.measure = "deviance")
+
+# Change of cross-validation measure with log(lambda)
+# Number of variables with non-null coefficient are indicated on the top of the graph
+plot(CV.LASSO)
+
+# Coefficients for the LASSO model at minimal lambda
+predict(CV.LASSO, type = "coef", s = "lambda.min")
+```
+```{r, echo = F}
+Coef_LASSO <- predict(CV.LASSO, type = "coef", s = "lambda.min")
+
+GLM <- glm(formula = DEATH_EVENT ~ .,
+              data = heart_train,
+              family = "binomial")
+
+plot(y = GLM$coefficients[-1], x = (1:11)+0.2, pch = "", axes = FALSE, xlim = c(0, 12), 
+     xlab = "Variable", ylab = "Coefficient", main = "Comparison of GLM (black) and LASSO (red) coefficients.")
+rect(xleft = seq(0.5, 10.5, by = 1),
+     xright = seq(1.5, 11.5, by = 1),
+     ytop = -100,
+     ybottom = 100,
+     col = ggplot2::alpha(c("white", "bisque"), 0.3), border = F)
+axis(2, c(0.5, 0, -0.5), col = NA, col.ticks = 1)
+axis(1, (1:11)+0.1, col = NA, 
+     labels = c("Age", "Anemia", "Diabetes", "Ejection", "HBP", "Platelets", "Sodium", "Sex", "Smoking", "Log(CP)", "Log(SC)"), 
+     col.ticks = 1)
+segments(x0 = 1:11, x1 = 1:11, y1 = Coef_LASSO[-c(1,3, 5, 8, 12, 14)], y0 = 0, lty = "dotted",)
+segments(x0 = (1:11)+0.2, x1 = (1:11)+0.2, y1 = GLM$coefficients[-1], y0 = 0, lty = "dotted")
+abline(h = 0)
+points(y = GLM$coefficients[-1], x = (1:11)+0.2, col = "black", pch = 16, cex = 1.5)
+points(y = Coef_LASSO[-c(1,3, 5, 8, 12, 14)], x = 1:11, col = "red", pch = 4, cex = 1.5, lwd = 2)
+```
+
+```{r}
+# Prediction and summary statistics in training dataset
+heart_train$DEATH_EVENT_pred <- predict(CV.LASSO, newx = train_dm, type = "class", s = "lambda.min")
+confusionMatrix(factor(heart_train$DEATH_EVENT), factor(heart_train$DEATH_EVENT_pred))
+```
+
+***   
+
+**(3) Predicting on validation data set**   
+
+**Parameters to consider**    
+-    Are previous steps correct ? 
+
+```{r}
+# Prediction and summary statistics in testing dataset
+heart_test$DEATH_EVENT_pred <- predict(CV.LASSO, newx = test_dm, type = "class", s = "lambda.min")
+confusionMatrix(factor(heart_test$DEATH_EVENT), factor(heart_test$DEATH_EVENT_pred))
+```
+
+***   
+  
+#### Y is continuous   
+
+**Summary of the different steps**  
+**(1)**    <span style="color:#d62d20">Data management</span>    
+Continuous data should be scaled    
+Dummy variables must be created for categorical variables   
+Training and testing data sets must be created   
+  
+**(2)**    <span style="color:#d62d20">Training of the data set</span>    
+Find $\lambda$ which minimize cross-validation error measure (mean squared error for continuous outcomes)    
+Predict on training dataset using the optimal $\lambda$ value   
+  
+**(3)**    <span style="color:#d62d20">Predicting on testing data set</span>    
+Predict on testing dataset       
+  
+***
+
+**(1) Data management**  
+
+**Parameters to consider**    
+- Scaling methodology [LINK](https://www.google.fr).    
+- Weighting of the sampling [LINK](https://www.google.fr).    
+
+The Heart Failure Prediction data was used. The outcome was ejection fraction and predictors were all others variables except death.
+More information about the dataset can be found in the dataset tab ([HERE](https://WWW.google.fr)) or on the kaggle site ([HERE](https://www.kaggle.com/andrewmvd/heart-failure-clinical-data?select=heart_failure_clinical_records_dataset.csv)).
+
+```{r, message = FALSE}
+library(readr)
+library(caret)
+
+heart <- as.data.frame(read_csv("heart_failure_clinical_records_dataset.csv", 
+                                col_types = cols(anaemia = col_factor(levels = c("0", "1")),                                                  
+                                                 sex = col_factor(levels = c("0", "1")),                                                  
+                                                 smoking = col_factor(levels = c("0", "1")), 
+                                                 diabetes = col_factor(levels = c("0", "1")), 
+                                                 high_blood_pressure = col_factor(levels = c("0","1")))))
+
+# Data management of continous variables ----------------------------------------------------
+
+# I) Log transformation for: creatinine_phosphokinase & serum_creatinine
+heart$CP_log <- log(heart$creatinine_phosphokinase)
+heart$SC_log <- log(heart$serum_creatinine)
+
+# II) Scaling using population summary statistics
+Cols <- names(heart[, c(1, 5, 7, 9, 14, 15)])
+heart[Cols] <- lapply(heart[Cols], scale)
+
+# III) Remove unused variables
+heart <- heart[,-c(3, 8, 12, 13)]
+
+# Sampling ----------------------------------------------------------------------------------
+
+# I) Unweighted sampling
+set.seed(11)
+trainIndex <- createDataPartition(heart$SC_log, p = .7, 
+                                  list = FALSE, 
+                                  times = 1)
+heart_train <- heart[trainIndex,]
+heart_test  <- heart[-trainIndex,]
+
+# Data management of categorical variables --------------------------------------------------
+
+# I) Create dummy variables
+
+# for training dataset
+train_dm <- dummyVars(SC_log ~ ., data = heart_train)
+train_dm <- predict(train_dm, newdata = heart_train)
+
+# for validation dataset
+test_dm <- dummyVars(SC_log ~ ., data = heart_test)
+test_dm <- predict(test_dm, newdata = heart_test)
+```
+
+***   
+
+**(2) Training of the data set** 
+
+**Parameters to consider**    
+-   nfolds: the number of cross-validation (default = 10).    
+-   standardize: standardize the x variables (default = TRUE).    
+-   alpha: the mixing parameter (alpha = 1 = LASSO penalty).   
+-   $\lambda$: the choice of optimal $\lambda$ to choose (minimal or in 1SE range of the minimal $\lambda$). see [HERE](https://stats.stackexchange.com/questions/138569/why-is-lambda-within-one-standard-error-from-the-minimum-is-a-recommended-valu)       
+-   choice of cross-validation error measure (default for continuous outcome = mean squared error)[HERE](https://stats.stackexchange.com/questions/131267/how-to-interpret-error-measures)    
+
+```{r, message = F}
+library(glmnet)
+
+# Cross-validation of LASSO model
+CV.LASSO <- cv.glmnet(x = train_dm,
+                y = heart_train$SC_log,
+                family = "gaussian",
+                nfolds = 10,
+                standardize = F,
+                alpha = 1,
+                type.measure = "mse")
+
+# Change of cross-validation measure with log(lambda)
+# Number of variables with non-null coefficient are indicated on the top of the graph
+plot(CV.LASSO)
+
+# Coefficients for the LASSO model at minimal lambda
+predict(CV.LASSO, type = "coef", s = "lambda.min")
+```
+```{r, echo = F}
+Coef_LASSO <- predict(CV.LASSO, type = "coef", s = "lambda.min")
+
+
+GLM <- lm(formula = SC_log ~ .,
+              data = heart_train)
+
+# plot(y = GLM$coefficients[-1], x = (1:11)+0.2, pch = "", axes = FALSE, xlim = c(0, 12), 
+#      xlab = "Variable", ylab = "Coefficient", main = "Comparison of GLM (black) and LASSO (red) coefficients.")
+# rect(xleft = seq(0.5, 10.5, by = 1),
+#      xright = seq(1.5, 11.5, by = 1),
+#      ytop = -100,
+#      ybottom = 100,
+#      col = ggplot2::alpha(c("white", "bisque"), 0.3), border = F)
+# axis(2, c(0.5, 0, -0.5), col = NA, col.ticks = 1)
+# axis(1, (1:11)+0.1, col = NA, 
+#      labels = c("Age", "Anemia", "Diabetes", "Ejection", "HBP", "Platelets", "Sodium", "Sex", "Smoking", "Log(CP)", "Log(SC)"), 
+#      col.ticks = 1)
+# segments(x0 = 1:11, x1 = 1:11, y1 = Coef_LASSO[-c(1,3, 5, 8)], y0 = 0, lty = "dotted",)
+# segments(x0 = (1:11)+0.2, x1 = (1:11)+0.2, y1 = GLM$coefficients[-1], y0 = 0, lty = "dotted")
+# abline(h = 0)
+# points(y = GLM$coefficients[-1], x = (1:11)+0.2, col = "black", pch = 16, cex = 1.5)
+# points(y = Coef_LASSO[-c(1,3, 5, 8)], x = 1:11, col = "red", pch = c(16, 4, 4, 16, 4, 4, 16, 4, 4, 16), cex = 1.5, lwd = 2)
+```
+
+```{r, echo = F}
+# Prediction and summary statistics in training dataset
+# heart_train$SC_log_pred <- predict(CV.LASSO, newx = train_dm, s = "lambda.min")
+# heart_train$SC_log_pred_GLM <- predict(GLM, newx = train_dm)
+# 
+# 
+# par(mfrow = c(1,2))
+# plot(heart_train$SC_log, (heart_train$SC_log_pred - heart_train$SC_log), xlab = "Log(SC) values", ylab = "Residuals", 
+#      main = paste("LASSO regression \n MSE = ", round(mean((heart_train$SC_log - heart_train$SC_log_pred)^2), 2), sep = ""))
+# abline(h = 0, lty = "dotted", col = "red")
+# plot(heart_train$SC_log, (heart_train$SC_log_pred_GLM - heart_train$SC_log), xlab = "Log(SC) values", ylab = "Residuals", 
+#      main = paste("LASSO regression \n MSE = ", round(mean((heart_train$SC_log - heart_train$SC_log_pred_GLM)^2), 2), sep = ""))
+# abline(h = 0, lty = "dotted", col = "red")
+```
+
+***   
+
+**(3)Predicting on testing data set**   
+
+**Parameters to consider**    
+-    Are previous steps correct ? 
+
+```{r}
+# Prediction and summary statistics in testing dataset
+heart_test$SC_log_pred <- predict(CV.LASSO, newx = test_dm, s = "lambda.min")
+postResample(pred = heart_test$SC_log_pred, obs = heart_test$SC_log)
+```
+
+***   
+  
+#### Y is a time-to-event outcome   
+
+**Summary of the different steps**  
+**(1)**    <span style="color:#d62d20">Data management</span>    
+Continuous data should be scaled    
+Dummy variables must be created for categorical variables   
+Training and testing data sets must be created   
+  
+**(2)**    <span style="color:#d62d20">Training of the data set</span>    
+Find $\lambda$ which minimize cross-validation error measure (partial likelihood deviance for time-to-event outcomes)    
+Predict on training dataset using the optimal $\lambda$ value   
+  
+**(3)**    <span style="color:#d62d20">Predicting on testing data set</span>    
+Predict on testing dataset       
+  
+***
+
+**(1) Data management**  
+
+**Parameters to consider**    
+- Scaling methodology [LINK](https://www.google.fr).    
+- Weighting of the sampling [LINK](https://www.google.fr).    
+- Choice of time-scale for time-to-event variable.    
+
+The Heart Failure Prediction data was used. The outcome was death as a time-to-event data and predictors were all others variables.
+More information about the dataset can be found in the dataset tab ([HERE](https://WWW.google.fr)) or on the kaggle site ([HERE](https://www.kaggle.com/andrewmvd/heart-failure-clinical-data?select=heart_failure_clinical_records_dataset.csv)).
+
+```{r, message = FALSE}
+library(readr)
+library(caret)
+library(survival)
+
+heart <- as.data.frame(read_csv("heart_failure_clinical_records_dataset.csv", 
+                                col_types = cols(anaemia = col_factor(levels = c("0", "1")),
+                                                 sex = col_factor(levels = c("0", "1")),
+                                                 smoking = col_factor(levels = c("0", "1")),
+                                                 diabetes = col_factor(levels = c("0", "1")), 
+                                                 high_blood_pressure = col_factor(levels = c("0","1")))))
+
+# Data management of continous variables ----------------------------------------------------
+
+# I) Log transformation for: creatinine_phosphokinase & serum_creatinine
+heart$CP_log <- log(heart$creatinine_phosphokinase)
+heart$SC_log <- log(heart$serum_creatinine)
+
+# II) Scaling using population summary statistics
+Cols <- names(heart[, c(1, 5, 7, 9, 14, 15)])
+heart[Cols] <- lapply(heart[Cols], scale)
+
+# III) Remove unused variables
+heart <- heart[,-c(3, 8)]
+
+# Sampling ----------------------------------------------------------------------------------
+
+# I) Unweighted sampling
+set.seed(11)
+trainIndex <- createDataPartition(heart$SC_log, p = .7, 
+                                  list = FALSE, 
+                                  times = 1)
+heart_train <- heart[trainIndex,]
+heart_test  <- heart[-trainIndex,]
+
+# Data management of time-to-event variables ------------------------------------------------
+
+# I) 
+y_train <- Surv(heart_train$time, heart_train$DEATH_EVENT)
+y_test <- Surv(heart_test$time, heart_test$DEATH_EVENT)
+
+# II) Separate outcome and predictors in different dataset
+x_train <- heart_train[,-c(10, 11)]
+x_test <- heart_test[,-c(10, 11)]
+
+# Data management of categorical variables --------------------------------------------------
+
+# I) Create dummy variables
+x_train_dm <- model.matrix( ~ .-1, data = x_train, contrasts.arg = lapply(x_train[,c(2, 3, 5, 8, 9)], contrasts, contrasts=FALSE))
+x_test_dm <-  model.matrix( ~ .-1, data = x_test, contrasts.arg = lapply(x_test[,c(2, 3, 5, 8, 9)], contrasts, contrasts=FALSE))
+```
+
+***   
+
+**(2) Training of the data set** 
+
+**Parameters to consider**    
+-   nfolds: the number of cross-validation (default = 10).    
+-   standardize: standardize the x variables (default = TRUE).    
+-   alpha: the mixing parameter (alpha = 1 = LASSO penalty).   
+-   $\lambda$: the choice of optimal $\lambda$ to choose (minimal or in 1SE range of the minimal $\lambda$). see [HERE](https://stats.stackexchange.com/questions/138569/why-is-lambda-within-one-standard-error-from-the-minimum-is-a-recommended-valu)       
+-   choice of cross-validation error measure (default for continuous outcome = mean squared error)[HERE](https://stats.stackexchange.com/questions/131267/how-to-interpret-error-measures)    
+
+```{r, message = F}
+library(glmnet)
+
+# Cross-validation of LASSO model
+CV.LASSO <- cv.glmnet(x = x_train_dm,
+                      y = y_train,
+                      family = "cox",
+                      nfolds = 10,
+                      standardize = F,
+                      alpha = 1)
+
+# Change of cross-validation measure with log(lambda)
+# Number of variables with non-null coefficient are indicated on the top of the graph
+plot(CV.LASSO)
+
+# Coefficients for the LASSO model at minimal lambda
+predict(CV.LASSO, type = "coef", s = "lambda.min")
+```
+
+```{r, echo = F}
+Coef_LASSO <- predict(CV.LASSO, type = "coef", s = "lambda.min")
+COX <- coxph(formula = Surv(heart_train$time, heart_train$DEATH_EVENT) ~ age + anaemia + diabetes + ejection_fraction + high_blood_pressure + platelets + serum_sodium + sex + smoking + CP_log + SC_log,
+              data = heart_train)
+
+# plot(y = GLM$coefficients[-1], x = (1:11)+0.2, pch = "", axes = FALSE, xlim = c(0, 12), 
+#      xlab = "Variable", ylab = "Coefficient", main = "Comparison of GLM (black) and LASSO (red) coefficients.")
+# rect(xleft = seq(0.5, 10.5, by = 1),
+#      xright = seq(1.5, 11.5, by = 1),
+#      ytop = -100,
+#      ybottom = 100,
+#      col = ggplot2::alpha(c("white", "bisque"), 0.3), border = F)
+# axis(2, c(0.5, 0, -0.5), col = NA, col.ticks = 1)
+# axis(1, (1:11)+0.1, col = NA, 
+#      labels = c("Age", "Anemia", "Diabetes", "Ejection", "HBP", "Platelets", "Sodium", "Sex", "Smoking", "Log(CP)", "Log(SC)"), 
+#      col.ticks = 1)
+# segments(x0 = 1:11, x1 = 1:11, y1 = Coef_LASSO[-c(1,3, 5, 8)], y0 = 0, lty = "dotted",)
+# segments(x0 = (1:11)+0.2, x1 = (1:11)+0.2, y1 = GLM$coefficients[-1], y0 = 0, lty = "dotted")
+# abline(h = 0)
+# points(y = GLM$coefficients[-1], x = (1:11)+0.2, col = "black", pch = 16, cex = 1.5)
+# points(y = Coef_LASSO[-c(1,3, 5, 8)], x = 1:11, col = "red", pch = c(16, 4, 4, 16, 4, 4, 16, 4, 4, 16), cex = 1.5, lwd = 2)
+```
+
+```{r}
+# Prediction and summary statistics in training dataset
+Pred_LASSO <- predict(CV.LASSO, newx = x_train_dm, s = "lambda.min")
+apply(Pred_LASSO, 2, Cindex, y= y_train)
+```
+
+***   
+
+**(3)Predicting on testing data set**   
+
+**Parameters to consider**    
+-    Are previous steps correct ? 
+
+```{r}
+# Prediction and summary statistics in testing dataset
+Pred_LASSO <- predict(CV.LASSO, newx = x_test_dm, s = "lambda.min")
+apply(Pred_LASSO, 2, Cindex, y= y_test)
+```
+
+***  
+
+###       
+<h2>Repeated cross-validated LASSO model</h2>
+
+Coming soon.    
+
+***   
+
+# References    
