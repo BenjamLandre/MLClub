@@ -206,7 +206,7 @@ points(y = Coef_LASSO[-c(1,3, 5, 8, 12, 14)], x = 1:11, col = "red", pch = 4, ce
 ```{r}
 # Prediction and summary statistics in training dataset
 heart_train$DEATH_EVENT_pred <- predict(CV.LASSO, newx = train_dm, type = "class", s = "lambda.min")
-confusionMatrix(factor(heart_train$DEATH_EVENT), factor(heart_train$DEATH_EVENT_pred),
+confusionMatrix(reference = factor(heart_train$DEATH_EVENT), data = factor(heart_train$DEATH_EVENT_pred),
                 positive = "1",
                 mode = "everything")
 ```
@@ -221,7 +221,7 @@ confusionMatrix(factor(heart_train$DEATH_EVENT), factor(heart_train$DEATH_EVENT_
 ```{r}
 # Prediction and summary statistics in testing dataset
 heart_test$DEATH_EVENT_pred <- predict(CV.LASSO, newx = test_dm, type = "class", s = "lambda.min")
-confusionMatrix(factor(heart_test$DEATH_EVENT), factor(heart_test$DEATH_EVENT_pred), 
+confusionMatrix(reference = factor(heart_test$DEATH_EVENT), data = factor(heart_test$DEATH_EVENT_pred), 
                 positive = "1",
                 mode = "everything")
 ```

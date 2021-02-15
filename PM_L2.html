@@ -648,36 +648,36 @@ predict(CV.Ridge, type = &quot;coef&quot;, s = &quot;lambda.min&quot;)</code></p
 <p><img src="PM_L2_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <pre class="r"><code># Prediction and summary statistics in training dataset
 heart_train$DEATH_EVENT_pred &lt;- predict(CV.Ridge, newx = train_dm, type = &quot;class&quot;, s = &quot;lambda.min&quot;)
-confusionMatrix(factor(heart_train$DEATH_EVENT), factor(heart_train$DEATH_EVENT_pred),                
+confusionMatrix(reference = factor(heart_train$DEATH_EVENT), data = factor(heart_train$DEATH_EVENT_pred),                
                 positive = &quot;1&quot;,
                 mode = &quot;everything&quot;)</code></pre>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##           Reference
 ## Prediction   0   1
-##          0 133   9
-##          1  39  29
+##          0 133  39
+##          1   9  29
 ##                                           
 ##                Accuracy : 0.7714          
 ##                  95% CI : (0.7086, 0.8264)
-##     No Information Rate : 0.819           
-##     P-Value [Acc &gt; NIR] : 0.9671          
+##     No Information Rate : 0.6762          
+##     P-Value [Acc &gt; NIR] : 0.001572        
 ##                                           
 ##                   Kappa : 0.4103          
 ##                                           
 ##  Mcnemar&#39;s Test P-Value : 2.842e-05       
 ##                                           
-##             Sensitivity : 0.7632          
-##             Specificity : 0.7733          
-##          Pos Pred Value : 0.4265          
-##          Neg Pred Value : 0.9366          
-##               Precision : 0.4265          
-##                  Recall : 0.7632          
+##             Sensitivity : 0.4265          
+##             Specificity : 0.9366          
+##          Pos Pred Value : 0.7632          
+##          Neg Pred Value : 0.7733          
+##               Precision : 0.7632          
+##                  Recall : 0.4265          
 ##                      F1 : 0.5472          
-##              Prevalence : 0.1810          
+##              Prevalence : 0.3238          
 ##          Detection Rate : 0.1381          
-##    Detection Prevalence : 0.3238          
-##       Balanced Accuracy : 0.7682          
+##    Detection Prevalence : 0.1810          
+##       Balanced Accuracy : 0.6815          
 ##                                           
 ##        &#39;Positive&#39; Class : 1               
 ## </code></pre>
@@ -687,36 +687,36 @@ confusionMatrix(factor(heart_train$DEATH_EVENT), factor(heart_train$DEATH_EVENT_
 - Are previous steps correct ?</p>
 <pre class="r"><code># Prediction and summary statistics in testing dataset
 heart_test$DEATH_EVENT_pred &lt;- predict(CV.Ridge, newx = test_dm, type = &quot;class&quot;, s = &quot;lambda.min&quot;)
-confusionMatrix(factor(heart_test$DEATH_EVENT), factor(heart_test$DEATH_EVENT_pred),
+confusionMatrix(reference = factor(heart_test$DEATH_EVENT), data = factor(heart_test$DEATH_EVENT_pred),
                 positive = &quot;1&quot;,
                 mode = &quot;everything&quot;)</code></pre>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##           Reference
 ## Prediction  0  1
-##          0 51 10
-##          1 17 11
+##          0 51 17
+##          1 10 11
 ##                                           
 ##                Accuracy : 0.6966          
 ##                  95% CI : (0.5901, 0.7897)
-##     No Information Rate : 0.764           
-##     P-Value [Acc &gt; NIR] : 0.9444          
+##     No Information Rate : 0.6854          
+##     P-Value [Acc &gt; NIR] : 0.4602          
 ##                                           
 ##                   Kappa : 0.2455          
 ##                                           
 ##  Mcnemar&#39;s Test P-Value : 0.2482          
 ##                                           
-##             Sensitivity : 0.5238          
-##             Specificity : 0.7500          
-##          Pos Pred Value : 0.3929          
-##          Neg Pred Value : 0.8361          
-##               Precision : 0.3929          
-##                  Recall : 0.5238          
+##             Sensitivity : 0.3929          
+##             Specificity : 0.8361          
+##          Pos Pred Value : 0.5238          
+##          Neg Pred Value : 0.7500          
+##               Precision : 0.5238          
+##                  Recall : 0.3929          
 ##                      F1 : 0.4490          
-##              Prevalence : 0.2360          
+##              Prevalence : 0.3146          
 ##          Detection Rate : 0.1236          
-##    Detection Prevalence : 0.3146          
-##       Balanced Accuracy : 0.6369          
+##    Detection Prevalence : 0.2360          
+##       Balanced Accuracy : 0.6145          
 ##                                           
 ##        &#39;Positive&#39; Class : 1               
 ## </code></pre>
