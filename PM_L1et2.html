@@ -689,7 +689,9 @@ plot(CV.Elastic)</code></pre>
 <p><img src="PM_L1et2_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <pre class="r"><code># Prediction and summary statistics in training dataset
 heart_train$DEATH_EVENT_pred &lt;- predict(CV.Elastic, type = &quot;raw&quot;, s = CV.Elastic$bestTune$lambda, alpha = CV.Elastic$bestTune$alpha)
-confusionMatrix(factor(heart_train$DEATH_EVENT), factor(heart_train$DEATH_EVENT_pred))</code></pre>
+confusionMatrix(factor(heart_train$DEATH_EVENT), factor(heart_train$DEATH_EVENT_pred),
+                positive = &quot;1&quot;,
+                mode = &quot;everything&quot;)</code></pre>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##           Reference
@@ -706,16 +708,19 @@ confusionMatrix(factor(heart_train$DEATH_EVENT), factor(heart_train$DEATH_EVENT_
 ##                                           
 ##  Mcnemar&#39;s Test P-Value : 7.431e-07       
 ##                                           
-##             Sensitivity : 0.7598          
-##             Specificity : 0.7812          
-##          Pos Pred Value : 0.9510          
-##          Neg Pred Value : 0.3676          
-##              Prevalence : 0.8483          
-##          Detection Rate : 0.6445          
-##    Detection Prevalence : 0.6777          
+##             Sensitivity : 0.7812          
+##             Specificity : 0.7598          
+##          Pos Pred Value : 0.3676          
+##          Neg Pred Value : 0.9510          
+##               Precision : 0.3676          
+##                  Recall : 0.7812          
+##                      F1 : 0.5000          
+##              Prevalence : 0.1517          
+##          Detection Rate : 0.1185          
+##    Detection Prevalence : 0.3223          
 ##       Balanced Accuracy : 0.7705          
 ##                                           
-##        &#39;Positive&#39; Class : 0               
+##        &#39;Positive&#39; Class : 1               
 ## </code></pre>
 <hr />
 <p><strong>(3)Predicting on testing data set</strong></p>
@@ -724,7 +729,9 @@ confusionMatrix(factor(heart_train$DEATH_EVENT), factor(heart_train$DEATH_EVENT_
 <pre class="r"><code># Prediction and summary statistics in testing dataset
 library(caret)
 A &lt;- predict(CV.Elastic$finalModel, newx = x_test_dm, s = CV.Elastic$bestTune$lambda, type = &quot;class&quot;)
-confusionMatrix(factor(heart_test$DEATH_EVENT), factor(A))</code></pre>
+confusionMatrix(factor(heart_test$DEATH_EVENT), factor(A),
+                positive = &quot;1&quot;,
+                mode = &quot;everything&quot;)</code></pre>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##           Reference
@@ -741,16 +748,19 @@ confusionMatrix(factor(heart_test$DEATH_EVENT), factor(A))</code></pre>
 ##                                          
 ##  Mcnemar&#39;s Test P-Value : 0.0003182      
 ##                                          
-##             Sensitivity : 0.7215         
-##             Specificity : 0.6667         
-##          Pos Pred Value : 0.9500         
-##          Neg Pred Value : 0.2143         
-##              Prevalence : 0.8977         
-##          Detection Rate : 0.6477         
-##    Detection Prevalence : 0.6818         
-##       Balanced Accuracy : 0.6941         
+##             Sensitivity : 0.66667        
+##             Specificity : 0.72152        
+##          Pos Pred Value : 0.21429        
+##          Neg Pred Value : 0.95000        
+##               Precision : 0.21429        
+##                  Recall : 0.66667        
+##                      F1 : 0.32432        
+##              Prevalence : 0.10227        
+##          Detection Rate : 0.06818        
+##    Detection Prevalence : 0.31818        
+##       Balanced Accuracy : 0.69409        
 ##                                          
-##        &#39;Positive&#39; Class : 0              
+##        &#39;Positive&#39; Class : 1              
 ## </code></pre>
 <hr />
 </div>

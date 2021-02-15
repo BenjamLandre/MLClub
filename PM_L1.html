@@ -649,7 +649,9 @@ predict(CV.LASSO, type = &quot;coef&quot;, s = &quot;lambda.min&quot;)</code></p
 <p><img src="PM_L1_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <pre class="r"><code># Prediction and summary statistics in training dataset
 heart_train$DEATH_EVENT_pred &lt;- predict(CV.LASSO, newx = train_dm, type = &quot;class&quot;, s = &quot;lambda.min&quot;)
-confusionMatrix(factor(heart_train$DEATH_EVENT), factor(heart_train$DEATH_EVENT_pred))</code></pre>
+confusionMatrix(factor(heart_train$DEATH_EVENT), factor(heart_train$DEATH_EVENT_pred),
+                positive = &quot;1&quot;,
+                mode = &quot;everything&quot;)</code></pre>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##           Reference
@@ -666,16 +668,19 @@ confusionMatrix(factor(heart_train$DEATH_EVENT), factor(heart_train$DEATH_EVENT_
 ##                                           
 ##  Mcnemar&#39;s Test P-Value : 0.01038         
 ##                                           
-##             Sensitivity : 0.8063          
-##             Specificity : 0.7400          
-##          Pos Pred Value : 0.9085          
-##          Neg Pred Value : 0.5441          
-##              Prevalence : 0.7619          
-##          Detection Rate : 0.6143          
-##    Detection Prevalence : 0.6762          
+##             Sensitivity : 0.7400          
+##             Specificity : 0.8063          
+##          Pos Pred Value : 0.5441          
+##          Neg Pred Value : 0.9085          
+##               Precision : 0.5441          
+##                  Recall : 0.7400          
+##                      F1 : 0.6271          
+##              Prevalence : 0.2381          
+##          Detection Rate : 0.1762          
+##    Detection Prevalence : 0.3238          
 ##       Balanced Accuracy : 0.7731          
 ##                                           
-##        &#39;Positive&#39; Class : 0               
+##        &#39;Positive&#39; Class : 1               
 ## </code></pre>
 <hr />
 <p><strong>(3) Predicting on validation data set</strong></p>
@@ -683,7 +688,9 @@ confusionMatrix(factor(heart_train$DEATH_EVENT), factor(heart_train$DEATH_EVENT_
 - Are previous steps correct ?</p>
 <pre class="r"><code># Prediction and summary statistics in testing dataset
 heart_test$DEATH_EVENT_pred &lt;- predict(CV.LASSO, newx = test_dm, type = &quot;class&quot;, s = &quot;lambda.min&quot;)
-confusionMatrix(factor(heart_test$DEATH_EVENT), factor(heart_test$DEATH_EVENT_pred))</code></pre>
+confusionMatrix(factor(heart_test$DEATH_EVENT), factor(heart_test$DEATH_EVENT_pred), 
+                positive = &quot;1&quot;,
+                mode = &quot;everything&quot;)</code></pre>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##           Reference
@@ -700,16 +707,19 @@ confusionMatrix(factor(heart_test$DEATH_EVENT), factor(heart_test$DEATH_EVENT_pr
 ##                                           
 ##  Mcnemar&#39;s Test P-Value : 0.07756         
 ##                                           
-##             Sensitivity : 0.7465          
-##             Specificity : 0.5556          
-##          Pos Pred Value : 0.8689          
-##          Neg Pred Value : 0.3571          
-##              Prevalence : 0.7978          
-##          Detection Rate : 0.5955          
-##    Detection Prevalence : 0.6854          
+##             Sensitivity : 0.5556          
+##             Specificity : 0.7465          
+##          Pos Pred Value : 0.3571          
+##          Neg Pred Value : 0.8689          
+##               Precision : 0.3571          
+##                  Recall : 0.5556          
+##                      F1 : 0.4348          
+##              Prevalence : 0.2022          
+##          Detection Rate : 0.1124          
+##    Detection Prevalence : 0.3146          
 ##       Balanced Accuracy : 0.6510          
 ##                                           
-##        &#39;Positive&#39; Class : 0               
+##        &#39;Positive&#39; Class : 1               
 ## </code></pre>
 <hr />
 </div>

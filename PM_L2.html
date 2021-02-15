@@ -648,7 +648,9 @@ predict(CV.Ridge, type = &quot;coef&quot;, s = &quot;lambda.min&quot;)</code></p
 <p><img src="PM_L2_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <pre class="r"><code># Prediction and summary statistics in training dataset
 heart_train$DEATH_EVENT_pred &lt;- predict(CV.Ridge, newx = train_dm, type = &quot;class&quot;, s = &quot;lambda.min&quot;)
-confusionMatrix(factor(heart_train$DEATH_EVENT), factor(heart_train$DEATH_EVENT_pred))</code></pre>
+confusionMatrix(factor(heart_train$DEATH_EVENT), factor(heart_train$DEATH_EVENT_pred),                
+                positive = &quot;1&quot;,
+                mode = &quot;everything&quot;)</code></pre>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##           Reference
@@ -665,16 +667,19 @@ confusionMatrix(factor(heart_train$DEATH_EVENT), factor(heart_train$DEATH_EVENT_
 ##                                           
 ##  Mcnemar&#39;s Test P-Value : 2.842e-05       
 ##                                           
-##             Sensitivity : 0.7733          
-##             Specificity : 0.7632          
-##          Pos Pred Value : 0.9366          
-##          Neg Pred Value : 0.4265          
-##              Prevalence : 0.8190          
-##          Detection Rate : 0.6333          
-##    Detection Prevalence : 0.6762          
+##             Sensitivity : 0.7632          
+##             Specificity : 0.7733          
+##          Pos Pred Value : 0.4265          
+##          Neg Pred Value : 0.9366          
+##               Precision : 0.4265          
+##                  Recall : 0.7632          
+##                      F1 : 0.5472          
+##              Prevalence : 0.1810          
+##          Detection Rate : 0.1381          
+##    Detection Prevalence : 0.3238          
 ##       Balanced Accuracy : 0.7682          
 ##                                           
-##        &#39;Positive&#39; Class : 0               
+##        &#39;Positive&#39; Class : 1               
 ## </code></pre>
 <hr />
 <p><strong>(3)Predicting on testing data set</strong></p>
@@ -682,7 +687,9 @@ confusionMatrix(factor(heart_train$DEATH_EVENT), factor(heart_train$DEATH_EVENT_
 - Are previous steps correct ?</p>
 <pre class="r"><code># Prediction and summary statistics in testing dataset
 heart_test$DEATH_EVENT_pred &lt;- predict(CV.Ridge, newx = test_dm, type = &quot;class&quot;, s = &quot;lambda.min&quot;)
-confusionMatrix(factor(heart_test$DEATH_EVENT), factor(heart_test$DEATH_EVENT_pred))</code></pre>
+confusionMatrix(factor(heart_test$DEATH_EVENT), factor(heart_test$DEATH_EVENT_pred),
+                positive = &quot;1&quot;,
+                mode = &quot;everything&quot;)</code></pre>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##           Reference
@@ -699,16 +706,19 @@ confusionMatrix(factor(heart_test$DEATH_EVENT), factor(heart_test$DEATH_EVENT_pr
 ##                                           
 ##  Mcnemar&#39;s Test P-Value : 0.2482          
 ##                                           
-##             Sensitivity : 0.7500          
-##             Specificity : 0.5238          
-##          Pos Pred Value : 0.8361          
-##          Neg Pred Value : 0.3929          
-##              Prevalence : 0.7640          
-##          Detection Rate : 0.5730          
-##    Detection Prevalence : 0.6854          
+##             Sensitivity : 0.5238          
+##             Specificity : 0.7500          
+##          Pos Pred Value : 0.3929          
+##          Neg Pred Value : 0.8361          
+##               Precision : 0.3929          
+##                  Recall : 0.5238          
+##                      F1 : 0.4490          
+##              Prevalence : 0.2360          
+##          Detection Rate : 0.1236          
+##    Detection Prevalence : 0.3146          
 ##       Balanced Accuracy : 0.6369          
 ##                                           
-##        &#39;Positive&#39; Class : 0               
+##        &#39;Positive&#39; Class : 1               
 ## </code></pre>
 <hr />
 </div>
