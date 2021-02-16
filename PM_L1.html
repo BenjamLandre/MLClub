@@ -25,15 +25,6 @@
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
-<style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
-
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
   pre:not([class]) {
@@ -78,7 +69,6 @@ h6 {
   text-align: left;
 }
 </style>
-
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 
@@ -286,7 +276,7 @@ $(document).ready(function () {
       <ul class="nav navbar-nav">
         <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fas fa-check-circle"></span>
+    <span class="fa fa-check-circle"></span>
      
     By method
      
@@ -345,7 +335,7 @@ $(document).ready(function () {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fas fa-check-circle"></span>
+    <span class="fa fa-check-circle"></span>
      
     By design
      
@@ -451,7 +441,7 @@ $(document).ready(function () {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fas fa-check-circle"></span>
+    <span class="fa fa-check-circle"></span>
      
     Meta-knowledge
      
@@ -471,7 +461,7 @@ $(document).ready(function () {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="dataset_page.html">
-    <span class="fas fa-book"></span>
+    <span class="fa fa-book"></span>
      
     Datasets
   </a>
@@ -558,10 +548,12 @@ Predict on validation dataset</p>
 - Scaling methodology <a href="https://www.google.fr">LINK</a>.<br />
 - Weighting of the sampling <a href="https://www.google.fr">LINK</a>.</p>
 <p>The Heart Failure Prediction data was used. The outcome was death at the end of the follow-up and predictors were all others variables. More information about the dataset can be found in the dataset tab (<a href="https://WWW.google.fr">HERE</a>) or on the kaggle site (<a href="https://www.kaggle.com/andrewmvd/heart-failure-clinical-data?select=heart_failure_clinical_records_dataset.csv">HERE</a>).</p>
-<pre class="r"><code>library(readr)
-library(caret)
-
-heart &lt;- as.data.frame(read_csv(&quot;heart_failure_clinical_records_dataset.csv&quot;, 
+<pre class="r"><code>library(readr)</code></pre>
+<pre><code>## Warning: package &#39;readr&#39; was built under R version 3.6.3</code></pre>
+<pre class="r"><code>library(caret)</code></pre>
+<pre><code>## Warning: package &#39;caret&#39; was built under R version 3.6.3</code></pre>
+<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 3.6.3</code></pre>
+<pre class="r"><code>heart &lt;- as.data.frame(read_csv(&quot;heart_failure_clinical_records_dataset.csv&quot;, 
                                 col_types = cols(anaemia = col_factor(levels = c(&quot;0&quot;, &quot;1&quot;)),                                                  
                                                  sex = col_factor(levels = c(&quot;0&quot;, &quot;1&quot;)),                                                  
                                                  smoking = col_factor(levels = c(&quot;0&quot;, &quot;1&quot;)), 
@@ -610,9 +602,9 @@ test_dm &lt;- predict(test_dm, newdata = heart_test)</code></pre>
 - alpha: the mixing parameter (alpha = 1 = LASSO penalty).<br />
 - <span class="math inline">\(\lambda\)</span>: the choice of optimal <span class="math inline">\(\lambda\)</span> to choose (minimal or in 1SE range of the minimal <span class="math inline">\(\lambda\)</span>). see <a href="https://stats.stackexchange.com/questions/138569/why-is-lambda-within-one-standard-error-from-the-minimum-is-a-recommended-valu">HERE</a><br />
 - choice of cross-validation error measure (default for binary outcome = deviance)</p>
-<pre class="r"><code>library(glmnet)
-
-# Cross-validation of LASSO model
+<pre class="r"><code>library(glmnet)</code></pre>
+<pre><code>## Warning: package &#39;glmnet&#39; was built under R version 3.6.3</code></pre>
+<pre class="r"><code># Cross-validation of LASSO model
 CV.LASSO &lt;- cv.glmnet(x = train_dm,
                 y = heart_train$DEATH_EVENT,
                 family = &quot;binomial&quot;,
@@ -992,7 +984,7 @@ Repeated cross-validated LASSO model
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

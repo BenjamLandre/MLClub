@@ -25,15 +25,6 @@
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
-<style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
-
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
   pre:not([class]) {
@@ -78,7 +69,6 @@ h6 {
   text-align: left;
 }
 </style>
-
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 
@@ -286,7 +276,7 @@ $(document).ready(function () {
       <ul class="nav navbar-nav">
         <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fas fa-check-circle"></span>
+    <span class="fa fa-check-circle"></span>
      
     By method
      
@@ -345,7 +335,7 @@ $(document).ready(function () {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fas fa-check-circle"></span>
+    <span class="fa fa-check-circle"></span>
      
     By design
      
@@ -451,7 +441,7 @@ $(document).ready(function () {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fas fa-check-circle"></span>
+    <span class="fa fa-check-circle"></span>
      
     Meta-knowledge
      
@@ -471,7 +461,7 @@ $(document).ready(function () {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="dataset_page.html">
-    <span class="fas fa-book"></span>
+    <span class="fa fa-book"></span>
      
     Datasets
   </a>
@@ -490,7 +480,119 @@ $(document).ready(function () {
 </div>
 
 
-<p>Insert relevant explanation.</p>
+<div id="regularization" class="section level2">
+<h2>Regularization</h2>
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<p>We would like to predict the quantity <span class="math inline">\(Y\)</span> using the explicative variable <span class="math inline">\(X\)</span>. One solution could be to fit the following linear model:</p>
+<p><span class="math inline">\(Y = f(X) + e\)</span></p>
+<p>Linear models can be prone to overfitting, i.e. these models will have perfect accuracy on the training data, but will perform poorly on unseen data.</p>
+
+<p><img src="PM_page_files/under_overfitting.png" /></p>
+<p>Let’s take an extreme example to illustrate why this happens. We have 100 observations in our training dataset. Let’s say we also have 100 features. If we fit a linear regression model with all of those 100 features, each coefficient would simply memorize one observation.</p>
+<p>In other words, we only memorized the noise in the training data, not the general pattern of the data. The predictive accuracy of this model will be low. Secondly, several explicative variables can be linearly related (multicollinearity), which can result in unstable estimation of parameter values.</p>
+<p>To address these issues, we can <em>artificially penalize model coefficients</em> in order to reduce (i.e. shrink) the coefficient values towards zero. This allows the less contributive variables to have a coefficient close to zero or equal zero. This refers to <em>regularization</em>, also called penalization or shrinkage.</p>
+
+<p><strong>How is it done in practice?</strong>  In linear regression, the coefficient <span class="math inline">\(beta\)</span> is estimated by ordinary least square method (OLS), which consists in minimizing the sum of the squares of the differences between the observed dependent variable (values of the variable being observed) in the given dataset and those predicted by the linear function of the independent variable. Basically, the purpose is to minimize the quantity:</p>
+<p><span class="math inline">\(\sum (Y - X * \beta) ^ 2\)</span>.</p>
+<p>See here a schematic representation of OLS: </p>
+<p><img src="PM_page_files/OLS.png" /></p>
+
+<p>In regularization, a “constraint” <span class="math inline">\(P\)</span> is added in the equation: <span class="math inline">\(\sum (Y - X * \beta) ^ 2 + P\)</span></p>
+<p>The more <span class="math inline">\(P\)</span> increases, the lowest the coefficient estimate will be. See here a schematic representation of penalized fit. Red dots represent the training data and green dots are the test data. </p>
+<p><img src="PM_page_files/penalized_fit.png" /></p>
+<p>Three forms of <span class="math inline">\(P\)</span> exist:</p>
+<ul>
+<li><p><span class="math inline">\(\lambda * \sum \beta^2\)</span>, corresponding to Ridge regression</p></li>
+<li><p><span class="math inline">\(\lambda * \sum | \beta |\)</span>, corresponding to Lasso regression</p></li>
+<li><p><span class="math inline">\(\lambda_1 * \sum | \beta | + \lambda_2 * \sum \beta^2\)</span>, corresponding to Elastic-Net regression, which is the generalization of Ridge and Lasso regressions.</p></li>
+</ul>
+<p>The amount of shrinkage is determined by the parameter (or <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_2\)</span> in Elastic-Net regression). The aim is to determine the best possible <span class="math inline">\(\lambda\)</span> value, i.e. that which minimizes the error resulting from the adjustment of the parameters. This is done using cross-validation (see the code section).</p>
+<p>There’s no “best” type of penalty. It really depends on the dataset and the question. It is recommended to try different algorithms that use a range of penalty strengths as part of the tuning process, which is more details in the code section.</p>
+<p>Note: <span class="math inline">\(\lambda\)</span>, <span class="math inline">\(\lambda_1\)</span>, <span class="math inline">\(\lambda_2\)</span> &gt;= 0. If <span class="math inline">\(\lambda\)</span> = 0 or <span class="math inline">\(\lambda_1\)</span> = <span class="math inline">\(\lambda_2\)</span> = 0, then we obtain the sum of least squared, corresponding to OLS.</p>
+</div>
+<div id="ridge-regression" class="section level3">
+<h3>Ridge regression</h3>
+<p>In Ridge regression, the best fit is found by minimizing the quantity:</p>
+<p><span class="math inline">\(\sum (Y - X * \beta) ^ 2 + \lambda * \sum \beta^2\)</span></p>
+<p>This method tends to shrink all coefficients, which means that all variables are retained in the model. The higher the penalty <span class="math inline">\(\lambda\)</span>, the more biased the coefficients:</p>
+<ul>
+<li><p>if <span class="math inline">\(\lambda\)</span> tends towards 0, then we tend to a similar situation to a model estimated by OLS (<span class="math inline">\(\beta\)</span>RIDGE –&gt; <span class="math inline">\(\beta\)</span> linear regression).</p></li>
+<li><p><span class="math inline">\(\lambda\)</span> tends towards infinity, then the value of the coefficients tends towards 0. Thus, selecting a good value for <span class="math inline">\(\lambda\)</span> is critical. It can be done using cross-validation.</p></li>
+</ul>
+
+<p>Note: In contrast to linear regression, ridge regression is highly affected by the scale of the explicative variables. Therefore, it is better to standardize the explicative variables before applying the ridge regression, so that they are all on the same scale.</p>
+
+<p>Note 2: Ridge regression tends to give the same value of coefficients to correlated variables.</p>
+
+<p>Summary:</p>
+<ul>
+<li><p>Ridge regression penalizes the squared size of coefficients.</p></li>
+<li><p>Practically, this leads to smaller coefficients, but it doesn’t force them to 0.</p></li>
+<li><p>In other words, Ridge offers feature shrinkage.</p></li>
+<li><p>The “strength” of the penalty should be tuned.</p></li>
+<li><p>A stronger penalty leads to coefficients pushed closer to zero, but it will not set any of them exactly to zero, which will produce non parsimonious models. The Lasso regression is an alternative that overcomes this drawback.</p></li>
+</ul>
+</div>
+<div id="lasso-regression" class="section level3">
+<h3>Lasso regression</h3>
+<p>Lasso, or LASSO, stands for Least Absolute Shrinkage and Selection Operator. In the case of Lasso regression, the best fit is found by minimizing the quantity:</p>
+<p><span class="math inline">\(\sum (Y - X * \beta) ^ 2 + \lambda * \sum | \beta |\)</span></p>
+<p>As a result of taking the absolute value instead of the squared parameters, the penalty forces the coefficient estimates with a minor contribution to the model to be exactly equal to zero. Lasso can be also seen as an alternative to the subset selection methods for performing variable selection in order to reduce the complexity of the model.</p>
+<p>A higher value of , i.e. a higher amount of shrinkage, leads to more null coefficients. If <span class="math inline">\(\lambda\)</span> tends towards infinity, all coefficients are forced to zero. On the contrary, if = 0, then the estimated coefficients will correspond to those estimated by OLS (i.e. _Lasso = _OLS). The value of is tunable and the optimal amount of shrinkage can be found using cross-validation (see code section).</p>
+<p>One advantage of Lasso regression over Ridge regression, is that it produces more parsimonious and more interpretable models, as it incorporates only a reduced set of the variables. Generally, Lasso might perform better in a situation where some of the variables have large coefficients, and the remaining variables have very small coefficients. Ridge regression will perform better when the outcome is a function of many predictors, all with coefficients of roughly equal size.</p>
+<p>If there is a group of highly correlated variables, then Lasso tends to select one variable from this group and ignore the others.</p>
+
+<p>Summary:</p>
+<ul>
+<li><p>Lasso regression penalizes the absolute size of coefficients.</p></li>
+<li><p>Practically, this leads to coefficients that can be exactly 0.</p></li>
+<li><p>Thus, Lasso offers automatic feature selection because it can completely remove some features.</p></li>
+<li><p>The “strength” of the penalty should be tuned.</p></li>
+<li><p>A stronger penalty leads to more coefficients pushed to zero.</p></li>
+</ul>
+</div>
+<div id="elastic-net-regression" class="section level3">
+<h3>Elastic-Net regression</h3>
+<p>Here, the best fit is estimated by minimizing the quantity:</p>
+<p><span class="math inline">\(\sum (Y - X * \beta) ^ 2 + \lambda_1 * \sum | \beta | + \lambda_2 * \sum \beta^2\)</span></p>
+<p>In Elastic-Net regression, the idea is to combine the advantages of Lasso and Ridge regression. The consequence of this is to effectively shrink coefficients (like in Ridge regression) and to set some coefficients to zero (as in Lasso).</p>
+<p>A new parameter, which acts as a slider between Lasso and Ridge is introduced in the penalty equation:</p>
+<p><span class="math inline">\(\lambda [ \sum_j (\alpha*|\beta_j| + (1 - \alpha)*\beta_j^2)]\)</span></p>
+
+<p>Where = 1 corresponding to Lasso and = 0 corresponding to Ridge.</p>
+
+<p>Note: = 0 corresponds to OLS. Now both values of and have to be determined using cross-validation. For each value of we apply a cross-validation to find the best value of .</p>
+</div>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
+<p><strong>Ridge regression:</strong></p>
+<ul>
+<li><p>Ridge regression penalizes the squared size of coefficients.</p></li>
+<li><p>Practically, this leads to smaller coefficients, but it doesn’t force them to 0.</p></li>
+<li><p>In other words, Ridge offers feature shrinkage.</p></li>
+<li><p>The “strength” of the penalty should be tuned.</p></li>
+<li><p>A stronger penalty leads to coefficients pushed closer to zero, but it will not set any of them exactly to zero, which will produce non parsimonious models.</p></li>
+</ul>
+
+<p><strong>Lasso regression:</strong></p>
+<ul>
+<li><p>Lasso regression penalizes the absolute size of coefficients.</p></li>
+<li><p>Practically, this leads to coefficients that can be exactly 0.</p></li>
+<li><p>Thus, Lasso offers automatic feature selection because it can completely remove some features.</p></li>
+<li><p>Remember, the “strength” of the penalty should be tuned.</p></li>
+<li><p>A stronger penalty leads to more coefficients pushed to zero.</p></li>
+</ul>
+
+<p><strong>Elastic-Net regression</strong></p>
+<ul>
+<li><p>Elastic-Net is a compromise between Lasso and Ridge.</p></li>
+<li><p>Elastic-Net penalizes a mix of both absolute and squared size.</p></li>
+<li><p>The ratio of the two penalty types should be tuned.</p></li>
+<li><p>The overall strength should also be tuned.</p></li>
+</ul>
+</div>
+</div>
 
 
 
@@ -501,7 +603,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
